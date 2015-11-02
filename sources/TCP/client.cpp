@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
       exit(0);
    }
 
-//   portno = atoi(argv[2]);
+   portno = atoi(argv[2]);
 
    /* Create a socket point */
    sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -31,7 +31,6 @@ int main(int argc, char *argv[]) {
    }
 
    server = gethostbyname(argv[1]);
-
    if (server == NULL) {
       fprintf(stderr,"ERROR, no such host\n");
       exit(0);

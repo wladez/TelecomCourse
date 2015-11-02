@@ -10,7 +10,6 @@ int main(int argc, char *argv[])
 {
     int sock, newsock, port_num, n;
     char buf[256];
-    char info[11];
     char command[]="show_users";
     struct sockaddr_in serv_addr, cli_addr;
     socklen_t clilen;
@@ -50,8 +49,7 @@ int main(int argc, char *argv[])
           perror("ERROR reading from socket");
           exit(1);
         }
-    info==buf;
-    if(strcmp(info,command)){
+    if(strncmp(buf,command,10) == 0){
         FILE *file;
         char *fname = "/home/user/project_t/us.txt";
         file = fopen(fname,"r");
