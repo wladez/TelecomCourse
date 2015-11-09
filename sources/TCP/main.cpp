@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
           perror("ERROR reading from socket");
           exit(1);
         }
-    if(strncmp(buf,command,10) == 0){
+    if(strncmp(buf,command,sizeof(command)-1) == 0){
         FILE *file;
         char *fname = "/home/user/project_t/us.txt";
         file = fopen(fname,"r");
