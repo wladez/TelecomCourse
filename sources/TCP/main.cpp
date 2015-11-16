@@ -5,14 +5,19 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <string>
+#include <unistd.h>
+
+using namespace std;
+
+void doprocessing (int sock);
 
 int main(int argc, char *argv[])
 {
     int sock, newsock, port_num, n;
-    char buf[256];
-    char command[]="show_users";
     struct sockaddr_in serv_addr, cli_addr;
     socklen_t clilen;
+
+    pid_t pid;
 
     sock=socket(AF_INET, SOCK_STREAM, 0);
 
@@ -36,45 +41,81 @@ int main(int argc, char *argv[])
     listen(sock,10);
     clilen=sizeof(cli_addr);
 
-    newsock=accept(sock, (struct sockaddr*)&cli_addr, &clilen);
-    if (newsock < 0)
-        {
-          perror("ERROR on accept");
-          exit(1);
-        }
-    bzero(buf,256);
-    n=recv(newsock, buf, 255, 0);
-    if (n < 0)
-        {
-          perror("ERROR reading from socket");
-          exit(1);
-        }
-    if(strncmp(buf,command,sizeof(command)-1) == 0){
-        FILE *file;
-        char *fname = "/home/user/project_t/us.txt";
-        file = fopen(fname,"r");
-        if(file == NULL)
-            {
-                perror("ERROR on openning file with users");
-                exit(1);
-            }
-        while (fgets (buf, sizeof(buf), file) != NULL)
-                printf("%s", buf);
 
-        printf("\n");
-        fclose(file);
-    }
-    else
-        printf("No matches\n");
-    n = send(newsock,buf,sizeof(buf), 0);
+    while (1) {
+         newsock = accept(sock, (struct sockaddr *) &cli_addr, &clilen);
 
-    if (n < 0)
-    {
-        perror("ERROR writing to socket");
-        exit(1);
-    }
+         if (newsock < 0) {
+            perror("ERROR on accept");
+            close(sock);
+            exit(1);
+         }
 
-        return 0;
+         /* Create child process */
+         pid = fork();
 
+         if (pid < 0) {
+            perror("ERROR on fork");
+            exit(1);
+         }
+
+         if (pid == 0) {
+            /* This is the client process */
+            close(sock);
+            while(true){
+                doprocessing(newsock);
+//              exit(0);
+               }
+         }
+         else {
+            close(newsock);
+         }
+      } /* end of while */
+    return 0;
+
+}
+
+
+void doprocessing (int newsock) {
+   int n;
+   char buf[256];
+   char command[]="show_users";
+   char quit[]="quit";
+   bzero(buf,256);
+       n=recv(newsock, buf, 255, 0);
+       if (n < 0)
+           {
+             perror("ERROR reading from socket");
+             exit(1);
+           }
+
+       if(strncmp(buf,quit,sizeof(quit)-1) == 0){
+               exit(1);
+       }
+
+       if(strncmp(buf,command,sizeof(command)-1) == 0){
+           FILE *file;
+           char *fname = "/home/user/project_t/us.txt";
+           file = fopen(fname,"r");
+           if(file == NULL)
+               {
+                   perror("ERROR on openning file with users");
+                   exit(1);
+               }
+           while (fgets (buf, sizeof(buf), file) != NULL)
+                   printf("%s", buf);
+
+           printf("\n");
+           fclose(file);
+       }
+       else
+           printf("No matches\n");
+       n = send(newsock,buf,sizeof(buf), 0);
+
+       if (n < 0)
+       {
+           perror("ERROR writing to socket");
+           exit(1);
+       }
 }
 

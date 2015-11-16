@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
    int sockfd, portno, n;
    struct sockaddr_in serv_addr;
    struct hostent *server;
-
+   char quit[]="quit";
    char buffer[256];
    portno=12345;
    if (argc < 3) {
@@ -50,30 +50,35 @@ int main(int argc, char *argv[]) {
    /* Now ask for a message from the user, this message
       * will be read by server
    */
+   while (true){
+    printf("Please enter the message: ");
+    bzero(buffer,256);
+    fgets(buffer,255,stdin);
 
-   printf("Please enter the message: ");
-   bzero(buffer,256);
-   fgets(buffer,255,stdin);
+    if(strncmp(buffer,quit,sizeof(quit)-1) == 0){
+            exit(1);
+    }
+    /* Send message to the server */
+      n = write(sockfd, buffer, strlen(buffer));
 
-   /* Send message to the server */
-   n = write(sockfd, buffer, strlen(buffer));
+     if (n < 0) {
+          perror("ERROR writing to socket");
+        exit(1);
+    }
 
-   if (n < 0) {
-      perror("ERROR writing to socket");
-      exit(1);
-   }
+    /* Now read server response */
+    bzero(buffer,256);
+    n = read(sockfd, buffer, 255);
 
-   /* Now read server response */
-   bzero(buffer,256);
-   n = read(sockfd, buffer, 255);
-
-   if (n < 0) {
+    if (n < 0) {
       perror("ERROR reading from socket");
       exit(1);
-   }
+    }
 
-   printf("%s\n",buffer);
-   return 0;
+    printf("%s\n",buffer);
+   }
+    return 0;
+
 }
 
 
