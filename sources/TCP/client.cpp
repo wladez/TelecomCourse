@@ -1,5 +1,5 @@
+//client
 #include <QCoreApplication>
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -56,29 +56,28 @@ int main(int argc, char *argv[]) {
     fgets(buffer,255,stdin);
 
     if(strncmp(buffer,quit,sizeof(quit)-1) == 0){
+            n = write(sockfd, buffer, strlen(buffer));
             exit(1);
     }
     /* Send message to the server */
-      n = write(sockfd, buffer, strlen(buffer));
+    n = write(sockfd, buffer, strlen(buffer));
 
-     if (n < 0) {
-          perror("ERROR writing to socket");
+    if (n < 0) {
+        perror("ERROR writing to socket");
         exit(1);
     }
 
     /* Now read server response */
     bzero(buffer,256);
     n = read(sockfd, buffer, 255);
-
+    printf("%s\n",buffer);
     if (n < 0) {
       perror("ERROR reading from socket");
       exit(1);
     }
 
-    printf("%s\n",buffer);
-   }
+
+  }
     return 0;
 
 }
-
-

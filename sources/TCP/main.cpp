@@ -75,13 +75,14 @@ int main(int argc, char *argv[])
 
 }
 
-
 void doprocessing (int newsock) {
    int n;
    char buf[256];
+   char buffer[256];
    char command[]="show_users";
    char quit[]="quit";
    bzero(buf,256);
+   bzero(buffer,256);
        n=recv(newsock, buf, 255, 0);
        if (n < 0)
            {
@@ -102,20 +103,21 @@ void doprocessing (int newsock) {
                    perror("ERROR on openning file with users");
                    exit(1);
                }
-           while (fgets (buf, sizeof(buf), file) != NULL)
+           while (fgets (buf, sizeof(buf), file) != NULL){
+                   strncat(buffer,buf,15);
                    printf("%s", buf);
-
+           }
            printf("\n");
            fclose(file);
+           n = send(newsock,buffer,sizeof(buffer), 0);
        }
-       else
+       else{
            printf("No matches\n");
-       n = send(newsock,buf,sizeof(buf), 0);
-
+           n = send(newsock,buf,sizeof(buf), 0);
+       }
        if (n < 0)
        {
            perror("ERROR writing to socket");
            exit(1);
        }
 }
-
