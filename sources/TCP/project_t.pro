@@ -7,8 +7,15 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    user.cpp \
+    server.cpp
 
 DISTFILES += \
-    us.txt
+    us.txt \
+    money.txt
+
+HEADERS += \
+    user.h \
+    server.h
 
