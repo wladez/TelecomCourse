@@ -27,8 +27,7 @@ int get_money(int usid){//узнать количество денег, имею
         fscanf(file,"%s", buffer);
         tmp=atoi(buffer);
         if(k==0){
-            res=tmp;
-            printf("%d\n",res);
+            res=tmp;            
             break;
         }
         if(!(i%2)){
@@ -46,6 +45,7 @@ int set_money(int uid, int value){
     int tmp=0;
     int before=0;
     int after=0;
+    int spaces=0;
     fpos_t pos;
     FILE *file;
     char *fname="/home/user/project_t/money.txt";
@@ -64,12 +64,11 @@ int set_money(int uid, int value){
             fprintf(file,"\t%i",value);
             after=ftell(file);
             if(before>after) {
-                int spaces = before - after;
+                spaces += before - after;
                 while(spaces!=0){
                     fputc(' ', file);
                     spaces--;
                 }
-                fputs("\n", file);
             }
             fflush(file);
             break;

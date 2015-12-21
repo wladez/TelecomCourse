@@ -8,9 +8,8 @@
 #include <string.h>
 #include <string>
 #include <unistd.h>
-#include <map>
 #include "server.h"
-#include "user.h"
+//#include "user.h"
 
 
 int main(int argc, char *argv[])
@@ -43,6 +42,11 @@ int main(int argc, char *argv[])
     clilen=sizeof(cli_addr);
     printf("TCP Server Waiting for client on port 12345\n");
 
+    pthread_t serv_thread;
+    if (pthread_create(&serv_thread, NULL, server_handler, NULL) != 0) {
+            printf("Error while creating thread for server\n");
+        }
+
     while (1) {
          pthread_t thread;
          newsock = accept(sock, (struct sockaddr *) &cli_addr, &clilen);
@@ -58,35 +62,11 @@ int main(int argc, char *argv[])
 //                     break;
 //         }
          pid=pthread_create(&thread, NULL, doprocessing, &newsock);
-         if (pid<0){
+         if (pid!=0){
              printf("Error while creating new thread\n");
              close(newsock);
              break;
          }
-//         if(pid==0){
-
-//         }else
-//             close(newsock);
-
-//         /* Create child process */
-//         pid = fork();
-
-//         if (pid < 0) {
-//            perror("ERROR on fork");
-//            exit(1);
-//         }
-
-//         if (pid == 0) {
-//            /* This is the client process */
-//            close(sock);
-//            while(true){
-//                doprocessing(newsock);
-////              exit(0);
-//               }
-//         }
-//         else {
-//            close(newsock);
-//         }
       } /* end of while */
     return 0;
 

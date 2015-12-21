@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <pthread.h>
 #include <string.h>
 #include <cstdlib>
 #include <netdb.h>
@@ -32,7 +33,7 @@ int authentication(int sock){
         n=recv(sock, buf, bufSize, 0);
         if (n < 0) {
           perror("ERROR reading from socket");
-          exit(1);
+          pthread_exit(0);
         }
         check=check_user(buf);//проверка совпадает ли имя которое ввёл пользователь
         //с именем в файле с пользователями
@@ -41,7 +42,7 @@ int authentication(int sock){
             if (n < 0)
             {
                 perror("ERROR writing to socket");
-                exit(1);
+                pthread_exit(0);
             }
             res=-1;
         }
@@ -50,7 +51,7 @@ int authentication(int sock){
             if (n < 0)
             {
                 perror("ERROR writing to socket");
-                exit(1);
+                pthread_exit(0);
             }
             connected[clientsCount].sock=sock;
             strcpy(connected[clientsCount].name,buf);
@@ -67,7 +68,7 @@ int authentication(int sock){
         n=recv(sock, buf, bufSize, 0);
         if (n < 0) {
           perror("ERROR reading from socket");
-          exit(1);
+          pthread_exit(0);
         }
 
         check=check_user(buf);//проверка нет ли уже такого имени у кого-нибудь
@@ -76,7 +77,7 @@ int authentication(int sock){
             if (n < 0)
             {
                 perror("ERROR writing to socket");
-                exit(1);
+                pthread_exit(0);
             }
             res=-1;
         }
@@ -85,11 +86,11 @@ int authentication(int sock){
             if (n < 0)
             {
                 perror("ERROR writing to socket");
-                exit(1);
+                pthread_exit(0);
             }
             connected[clientsCount].sock=sock;
             strcpy(connected[clientsCount].name,buf);
-            connected[clientsCount].money=5000;
+            connected[clientsCount].money=6000;
             printf("Connected client %s\n",buf);
             connected[clientsCount].uid=set_newid();//получение id пользователя
             FILE *file;
@@ -102,7 +103,7 @@ int authentication(int sock){
             char *mon_name="/home/user/project_t/money.txt";
             mon=fopen(mon_name,"a");
             fprintf(mon,"%i\t",connected[clientsCount].uid);
-            fprintf(mon,"%i      \n",connected[clientsCount].money);
+            fprintf(mon,"%i            \n",connected[clientsCount].money);
             fclose(mon);
             clientsCount++;
             res=1;
@@ -125,14 +126,15 @@ void* doprocessing (void* newsock) {
    do {
            aut = authentication(socket); //процесс аутентификации клиента
        } while (aut < 0);
-   while(1){
-       n=recv(socket, request, bufSize, 0);
-       if(n<0){
-           perror("ERROR reading from socket");
-           break;
-       }
+   while(recv(socket, request, bufSize, 0)>=0){
+       //n=recv(socket, request, bufSize, 0);
+//       if(n<0){
+//           perror("ERROR reading from socket");
+//           break;
+//       }
        if(strncmp(request,quit,sizeof(quit)-1) == 0){
-               break;
+           disconnect(socket);
+           break;
        }
        else if(strncmp(request,command,sizeof(command)-1) == 0){
            show_users(socket);
@@ -157,21 +159,20 @@ void show_users(int sock){
     char *fname = "/home/user/project_t/us.txt";
     file = fopen(fname,"r");
     if(file == NULL)
-        {
-            perror("ERROR on openning file with users");
-            exit(1);
-        }
+    {
+        perror("ERROR on openning file with users");
+        pthread_exit(0);
+    }
     while (fgets (tmp, sizeof(tmp), file) != NULL){
-            strncat(buffer,tmp,35);
-            printf("%s", tmp);
+        strncat(buffer,tmp,35);
+        printf("%s", tmp);
     }
     printf("\n");
     fclose(file);
     n = send(sock,buffer,sizeof(buffer), 0);
     if (n < 0)
     {
-        perror("ERROR writing to socket");
-        exit(1);
+        pthread_exit(0);
     }
 }
 
@@ -192,8 +193,7 @@ void check_wallet(int sock){
     n = send(sock,buffer,sizeof(buffer), 0);
     if (n < 0)
     {
-        perror("ERROR writing to socket");
-        exit(1);
+        pthread_exit(0);
     }
 }
 
@@ -205,7 +205,7 @@ void transfer(int sock){
     n=recv(sock, buffer, bufSize+1, 0);
     if(n<0){
         perror("ERROR reading from socket");
-        exit(1);
+        pthread_exit(0);
     }
     printf("%s\n",buffer);
     char *tmp=strstr(buffer," ");
@@ -216,8 +216,7 @@ void transfer(int sock){
         n = send(sock,"no_match",8, 0);//говорим клиенту, что нет совпадений
         if (n < 0)
         {
-            perror("ERROR writing to socket");
-            exit(1);
+            pthread_exit(0);
         }
     }
     else{
@@ -236,8 +235,7 @@ void transfer(int sock){
         n = send(sock,"ok",2, 0);
         if (n < 0)
         {
-            perror("ERROR writing to socket");
-            exit(1);
+            pthread_exit(0);
         }
     }
 }
@@ -254,10 +252,10 @@ int check_user(char buf[]){
     bzero(name,bufSize+1);
     strcpy(name,buf);
     if(file == NULL)
-        {
-            perror("ERROR on openning file with users");
-            exit(1);
-        }
+    {
+        perror("ERROR on openning file with users");
+        exit(1);
+    }
     int i = 0;
     bzero(tmp,bufSize+1);
     while(fscanf(file,"%s", tmp)!=EOF){
@@ -276,4 +274,44 @@ int check_user(char buf[]){
     }
     fclose(file);
     return res;
+}
+
+void disconnect(int sock){
+    int i = 0;
+        for (i = 0; i < clientsCount; ++i) {
+            if (connected[i].sock == sock)
+                break;
+        }
+        if (i != clientsCount) {
+            for (++i; i < clientsCount; ++i) {
+                connected[i - 1] = connected[i];
+            }
+            --clientsCount;
+        }
+}
+
+void* server_handler(void*){
+    while (1) {
+            char command[bufSize];
+            bzero(command, bufSize);
+            scanf("%s", command);
+            if (strcmp(command, "show") == 0) {
+                for (int i = 0; i < clientsCount; ++i) {
+                    printf("%d : %s\n", connected[i].sock, connected[i].name);
+                }
+            } else if (strcmp(command, "disconnect") == 0) {
+                int sock = 0;
+                scanf("%d", &sock);
+                disconnect(sock);
+                int n = send(sock, "exit", 4, 0);
+                if (n < 0)
+                {
+                    perror("ERROR writing to socket");
+                    exit(1);
+                }
+                close(sock);
+            } else {
+                printf("Undefined command\n");
+            }
+        }
 }

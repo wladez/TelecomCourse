@@ -14,6 +14,7 @@ int authentication(int sockfd);
 void showUsers(int sockfd, char command[]);
 void checkWallet(int sockfd);
 void transfer(int sockfd);
+int disconnect(int sockfd, char* buf);
 
 int main(int argc, char *argv[]) {
    int sockfd, portno, n;
@@ -71,6 +72,10 @@ int main(int argc, char *argv[]) {
 
     if(strncmp(buffer,quit,sizeof(quit)-1) == 0){
             n = send(sockfd, buffer, strlen(buffer),0);
+            if (n < 0) {
+                perror("ERROR writing to socket");
+                exit(1);
+            }
             close(sockfd);
             break;
     }
@@ -98,17 +103,20 @@ void showUsers(int sockfd, char command[]){
     n = send(sockfd, buffer, strlen(buffer),0);
     if (n < 0) {
         perror("ERROR writing to socket");
+        close(sockfd);
         exit(1);
     }
 
     /* Now read server response */
     bzero(buffer,bufSize);
-    n = recv(sockfd, buffer, bufSize+1,0);
-    printf("%s\n",buffer);
+    n = recv(sockfd, buffer, bufSize+1,0);    
     if (n < 0) {
       perror("ERROR reading from socket");
+      close(sockfd);
       exit(1);
     }
+    disconnect(sockfd, buffer);
+    printf("%s\n",buffer);
 }
 
 void checkWallet(int sockfd){
@@ -117,14 +125,17 @@ void checkWallet(int sockfd){
     n=send(sockfd, "wallet", 6, 0);
     if (n < 0) {
         perror("ERROR writing to socket");
+        close(sockfd);
         exit(1);
     }
-    n = recv(sockfd, buffer, bufSize+1,0);
-    printf("%s\n",buffer);
+    n = recv(sockfd, buffer, bufSize+1,0);    
     if (n < 0) {
       perror("ERROR reading from socket");
+      close(sockfd);
       exit(1);
     }
+    disconnect(sockfd, buffer);
+    printf("%s\n",buffer);
 }
 
 void transfer(int sockfd){
@@ -135,6 +146,7 @@ void transfer(int sockfd){
     n=send(sockfd, "transf", 6, 0);
     if (n < 0) {
         perror("ERROR writing to socket");
+        close(sockfd);
         exit(1);
     }
     printf("To who and how much do you want transfer money?\n");
@@ -147,8 +159,10 @@ void transfer(int sockfd){
     n=recv(sockfd, buffer, bufSize+1,0);
     if (n < 0) {
       perror("ERROR reading from socket");
+      close(sockfd);
       exit(1);
     }
+    disconnect(sockfd, buffer);
     if(strcmp(buffer,"no_match")==0){
         printf("There is no user with such username\n");
     }
@@ -158,6 +172,15 @@ void transfer(int sockfd){
     else{
         printf("Some error occurs during the operation\n");
     }
+}
+
+int disconnect(int sockfd, char* buf){
+    if (strcmp(buf, "exit") == 0) {
+            printf("Disconnected from server\n");
+            close(sockfd);
+            exit(1);
+        }
+        else return -1;
 }
 
 int authentication(int sockfd){
@@ -179,19 +202,23 @@ int authentication(int sockfd){
         n=send(sockfd,"exist",bufSize,0);//посылка серверу сообщения о том, что входит существующий пользователь
         if (n < 0) {
             perror("ERROR writing to socket");
+            close(sockfd);
             exit(1);
         }
         n=send(sockfd,login,bufSize,0);//посылка серверу имени пользователя
         if (n < 0) {
             perror("ERROR writing to socket");
+            close(sockfd);
             exit(1);
         }
         bzero(buffer,bufSize+1);
         n = recv(sockfd, buffer, bufSize+1,0);//ответ от сервера, правильны ли данные или нет
         if (n < 0) {
             perror("ERROR reading from socket");
+            close(sockfd);
             exit(1);
         }
+        disconnect(sockfd, buffer);
         if(strncmp(buffer,ok,sizeof(ok)-1) == 0){//данные правильны
             printf("Hello %s, you has successfully logined\n",login);
             res=1;
@@ -207,19 +234,23 @@ int authentication(int sockfd){
         n=send(sockfd,"new",bufSize,0);//посылка сообщения серверу о регистрации нового пользователя
         if (n < 0) {
             perror("ERROR writing to socket");
+            close(sockfd);
             exit(1);
         }
         n=send(sockfd,reg,bufSize,0);//посылка имени нового пользователя
         if (n < 0) {
             perror("ERROR writing to socket");
+            close(sockfd);
             exit(1);
         }
         bzero(buffer,bufSize+1);
         n = recv(sockfd, buffer, bufSize+1,0);//ответ от сервера, правильны ли данные или нет
         if (n < 0) {
             perror("ERROR reading from socket");
+            close(sockfd);
             exit(1);
         }
+        disconnect(sockfd, buffer);
         if(strncmp(buffer,ok,sizeof(ok)-1) == 0){//данные правильны
             printf("Hello %s, you has successfully registered and logined\n",reg);
             res=1;
