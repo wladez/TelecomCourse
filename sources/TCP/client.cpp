@@ -1,12 +1,13 @@
 //client
-#include <QCoreApplication>
-#include <stdio.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
 #include <stdlib.h>
-
-#include <netdb.h>
-#include <netinet/in.h>
-#include <unistd.h>
+#include <stdio.h>
 #include <string.h>
+
+#pragma comment (lib, "Ws2_32.lib")
+#pragma comment (lib, "Mswsock.lib")
+#pragma comment (lib, "AdvApi32.lib")
 
 #define bufSize 255
 
@@ -17,6 +18,8 @@ void transfer(int sockfd);
 int disconnect(int sockfd, char* buf);
 
 int main(int argc, char *argv[]) {
+	WORD wVersionRequested = MAKEWORD(1, 1);       // Stuff for WSA functions
+	WSADATA wsaData;
    int sockfd, portno, n;
    int aut;
    struct sockaddr_in serv_addr;
@@ -26,7 +29,9 @@ int main(int argc, char *argv[]) {
    char wallet[]="check wallet";
    char transf[]="transfer";
    char buffer[bufSize+1];
-   portno=12345;
+
+   WSAStartup(wVersionRequested, &wsaData);
+   //portno=12345;
    if (argc < 3) {
       fprintf(stderr,"usage %s hostname port\n", argv[0]);
       exit(0);
@@ -48,9 +53,10 @@ int main(int argc, char *argv[]) {
       exit(0);
    }
 
-   bzero((char *) &serv_addr, sizeof(serv_addr));
+   memset((char *) &serv_addr, 0, sizeof(serv_addr));
    serv_addr.sin_family = AF_INET;
-   bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
+   serv_addr.sin_addr.s_addr = inet_addr(argv[1]);
+   //strncpy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
    serv_addr.sin_port = htons(portno);
 
    /* Now connect to the server */
@@ -67,7 +73,7 @@ int main(int argc, char *argv[]) {
        } while (aut < 0);
    while (1){
     printf("Enter the command: ");
-    bzero(buffer,bufSize+1);
+    memset(buffer, 0, bufSize+1);
     fgets(buffer,bufSize+1,stdin);
 
     if(strncmp(buffer,quit,sizeof(quit)-1) == 0){
@@ -76,7 +82,7 @@ int main(int argc, char *argv[]) {
                 perror("ERROR writing to socket");
                 exit(1);
             }
-            close(sockfd);
+            closesocket(sockfd);
             break;
     }
     else if(strncmp(buffer,show,sizeof(show)-1) == 0){
@@ -98,21 +104,21 @@ int main(int argc, char *argv[]) {
 void showUsers(int sockfd, char command[]){
     int n;
     char buffer[bufSize+1];
-    bzero(buffer, bufSize);
+    memset(buffer, 0, bufSize);
     strcpy(buffer,command);
     n = send(sockfd, buffer, strlen(buffer),0);
     if (n < 0) {
         perror("ERROR writing to socket");
-        close(sockfd);
+        closesocket(sockfd);
         exit(1);
     }
 
     /* Now read server response */
-    bzero(buffer,bufSize);
+    memset(buffer, 0, bufSize);
     n = recv(sockfd, buffer, bufSize+1,0);    
     if (n < 0) {
       perror("ERROR reading from socket");
-      close(sockfd);
+      closesocket(sockfd);
       exit(1);
     }
     disconnect(sockfd, buffer);
@@ -125,13 +131,14 @@ void checkWallet(int sockfd){
     n=send(sockfd, "wallet", 6, 0);
     if (n < 0) {
         perror("ERROR writing to socket");
-        close(sockfd);
+        closesocket(sockfd);
         exit(1);
     }
+	memset(buffer, 0, bufSize+1);
     n = recv(sockfd, buffer, bufSize+1,0);    
     if (n < 0) {
       perror("ERROR reading from socket");
-      close(sockfd);
+      closesocket(sockfd);
       exit(1);
     }
     disconnect(sockfd, buffer);
@@ -142,11 +149,11 @@ void transfer(int sockfd){
     int n;
     char tmp[bufSize];
     char buffer[bufSize+1];
-    bzero(buffer,bufSize+1);
+    memset(buffer, 0, bufSize+1);
     n=send(sockfd, "transf", 6, 0);
     if (n < 0) {
         perror("ERROR writing to socket");
-        close(sockfd);
+        closesocket(sockfd);
         exit(1);
     }
     printf("To who and how much do you want transfer money?\n");
@@ -155,11 +162,11 @@ void transfer(int sockfd){
     strcat(buffer," ");
     strcat(buffer,tmp);
     n=send(sockfd, buffer, bufSize+1, 0);
-    bzero(buffer,bufSize+1);
+    memset(buffer, 0, bufSize+1);
     n=recv(sockfd, buffer, bufSize+1,0);
     if (n < 0) {
       perror("ERROR reading from socket");
-      close(sockfd);
+      closesocket(sockfd);
       exit(1);
     }
     disconnect(sockfd, buffer);
@@ -177,7 +184,7 @@ void transfer(int sockfd){
 int disconnect(int sockfd, char* buf){
     if (strcmp(buf, "exit") == 0) {
             printf("Disconnected from server\n");
-            close(sockfd);
+            closesocket(sockfd);
             exit(1);
         }
         else return -1;
@@ -192,7 +199,7 @@ int authentication(int sockfd){
     char registration[]="register";
     int n;
     int res=-1;
-    bzero(buffer, bufSize+1);
+    memset(buffer, 0, bufSize+1);
     printf("Sign in or register\n");
     fgets(buffer,bufSize+1,stdin);
     //scanf("%s", &buffer);
@@ -202,20 +209,20 @@ int authentication(int sockfd){
         n=send(sockfd,"exist",bufSize,0);//посылка серверу сообщения о том, что входит существующий пользователь
         if (n < 0) {
             perror("ERROR writing to socket");
-            close(sockfd);
+            closesocket(sockfd);
             exit(1);
         }
         n=send(sockfd,login,bufSize,0);//посылка серверу имени пользователя
         if (n < 0) {
             perror("ERROR writing to socket");
-            close(sockfd);
+            closesocket(sockfd);
             exit(1);
         }
-        bzero(buffer,bufSize+1);
+        memset(buffer, 0, bufSize+1);
         n = recv(sockfd, buffer, bufSize+1,0);//ответ от сервера, правильны ли данные или нет
         if (n < 0) {
             perror("ERROR reading from socket");
-            close(sockfd);
+            closesocket(sockfd);
             exit(1);
         }
         disconnect(sockfd, buffer);
@@ -234,20 +241,20 @@ int authentication(int sockfd){
         n=send(sockfd,"new",bufSize,0);//посылка сообщения серверу о регистрации нового пользователя
         if (n < 0) {
             perror("ERROR writing to socket");
-            close(sockfd);
+            closesocket(sockfd);
             exit(1);
         }
         n=send(sockfd,reg,bufSize,0);//посылка имени нового пользователя
         if (n < 0) {
             perror("ERROR writing to socket");
-            close(sockfd);
+            closesocket(sockfd);
             exit(1);
         }
-        bzero(buffer,bufSize+1);
+        memset(buffer, 0, bufSize+1);
         n = recv(sockfd, buffer, bufSize+1,0);//ответ от сервера, правильны ли данные или нет
         if (n < 0) {
             perror("ERROR reading from socket");
-            close(sockfd);
+            closesocket(sockfd);
             exit(1);
         }
         disconnect(sockfd, buffer);
