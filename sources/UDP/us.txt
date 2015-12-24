@@ -1,0 +1,4 @@
+wladez	1
+azat	2
+lera	3
+egor	4
