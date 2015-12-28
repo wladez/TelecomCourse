@@ -1,0 +1,2169 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage[OT1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{cmap}					% поиск в PDF
+\usepackage{mathtext} 				% русские буквы в формулах
+%\usepackage{tikz-uml}               % uml диаграммы
+
+
+% Генератор текста
+\usepackage{blindtext}
+
+%------------------------------------------------------------------------------
+
+% Подсветка синтаксиса
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{listings}
+ 
+ % Цвета для кода
+\definecolor{string}{HTML}{B40000} % цвет строк в коде
+\definecolor{comment}{HTML}{008000} % цвет комментариев в коде
+\definecolor{keyword}{HTML}{1A00FF} % цвет ключевых слов в коде
+\definecolor{morecomment}{HTML}{8000FF} % цвет include и других элементов в коде
+\definecolor{captiontext}{HTML}{FFFFFF} % цвет текста заголовка в коде
+\definecolor{captionbk}{HTML}{999999} % цвет фона заголовка в коде
+\definecolor{bk}{HTML}{FFFFFF} % цвет фона в коде
+\definecolor{frame}{HTML}{999999} % цвет рамки в коде
+\definecolor{brackets}{HTML}{B40000} % цвет скобок в коде
+ 
+ % Настройки отображения кода
+\lstset{
+language=C, % Язык кода по умолчанию
+morekeywords={*,...}, % если хотите добавить ключевые слова, то добавляйте
+ % Цвета
+keywordstyle=\color{keyword}\ttfamily\bfseries,
+stringstyle=\color{string}\ttfamily,
+commentstyle=\color{comment}\ttfamily\itshape,
+morecomment=[l][\color{morecomment}]{\#}, 
+ % Настройки отображения     
+breaklines=true, % Перенос длинных строк
+basicstyle=\ttfamily\footnotesize, % Шрифт для отображения кода
+backgroundcolor=\color{bk}, % Цвет фона кода
+%frame=lrb,xleftmargin=\fboxsep,xrightmargin=-\fboxsep, % Рамка, подогнанная к заголовку
+frame=tblr
+rulecolor=\color{frame}, % Цвет рамки
+tabsize=3, % Размер табуляции в пробелах
+ % Настройка отображения номеров строк. Если не нужно, то удалите весь блок
+numbers=left, % Слева отображаются номера строк
+stepnumber=1, % Каждую строку нумеровать
+numbersep=5pt, % Отступ от кода 
+numberstyle=\small\color{black}, % Стиль написания номеров строк
+ % Для отображения русского языка
+extendedchars=true,
+literate={Ö}{{\"O}}1
+  {Ä}{{\"A}}1
+  {Ü}{{\"U}}1
+  {ß}{{\ss}}1
+  {ü}{{\"u}}1
+  {ä}{{\"a}}1
+  {ö}{{\"o}}1
+  {~}{{\textasciitilde}}1
+  {а}{{\selectfont\char224}}1
+  {б}{{\selectfont\char225}}1
+  {в}{{\selectfont\char226}}1
+  {г}{{\selectfont\char227}}1
+  {д}{{\selectfont\char228}}1
+  {е}{{\selectfont\char229}}1
+  {ё}{{\"e}}1
+  {ж}{{\selectfont\char230}}1
+  {з}{{\selectfont\char231}}1
+  {и}{{\selectfont\char232}}1
+  {й}{{\selectfont\char233}}1
+  {к}{{\selectfont\char234}}1
+  {л}{{\selectfont\char235}}1
+  {м}{{\selectfont\char236}}1
+  {н}{{\selectfont\char237}}1
+  {о}{{\selectfont\char238}}1
+  {п}{{\selectfont\char239}}1
+  {р}{{\selectfont\char240}}1
+  {с}{{\selectfont\char241}}1
+  {т}{{\selectfont\char242}}1
+  {у}{{\selectfont\char243}}1
+  {ф}{{\selectfont\char244}}1
+  {х}{{\selectfont\char245}}1
+  {ц}{{\selectfont\char246}}1
+  {ч}{{\selectfont\char247}}1
+  {ш}{{\selectfont\char248}}1
+  {щ}{{\selectfont\char249}}1
+  {ъ}{{\selectfont\char250}}1
+  {ы}{{\selectfont\char251}}1
+  {ь}{{\selectfont\char252}}1
+  {э}{{\selectfont\char253}}1
+  {ю}{{\selectfont\char254}}1
+  {я}{{\selectfont\char255}}1
+  {А}{{\selectfont\char192}}1
+  {Б}{{\selectfont\char193}}1
+  {В}{{\selectfont\char194}}1
+  {Г}{{\selectfont\char195}}1
+  {Д}{{\selectfont\char196}}1
+  {Е}{{\selectfont\char197}}1
+  {Ё}{{\"E}}1
+  {Ж}{{\selectfont\char198}}1
+  {З}{{\selectfont\char199}}1
+  {И}{{\selectfont\char200}}1
+  {Й}{{\selectfont\char201}}1
+  {К}{{\selectfont\char202}}1
+  {Л}{{\selectfont\char203}}1
+  {М}{{\selectfont\char204}}1
+  {Н}{{\selectfont\char205}}1
+  {О}{{\selectfont\char206}}1
+  {П}{{\selectfont\char207}}1
+  {Р}{{\selectfont\char208}}1
+  {С}{{\selectfont\char209}}1
+  {Т}{{\selectfont\char210}}1
+  {У}{{\selectfont\char211}}1
+  {Ф}{{\selectfont\char212}}1
+  {Х}{{\selectfont\char213}}1
+  {Ц}{{\selectfont\char214}}1
+  {Ч}{{\selectfont\char215}}1
+  {Ш}{{\selectfont\char216}}1
+  {Щ}{{\selectfont\char217}}1
+  {Ъ}{{\selectfont\char218}}1
+  {Ы}{{\selectfont\char219}}1
+  {Ь}{{\selectfont\char220}}1
+  {Э}{{\selectfont\char221}}1
+  {Ю}{{\selectfont\char222}}1
+  {Я}{{\selectfont\char223}}1
+  {і}{{\selectfont\char105}}1
+  {ї}{{\selectfont\char168}}1
+  {є}{{\selectfont\char185}}1
+  {ґ}{{\selectfont\char160}}1
+  {І}{{\selectfont\char73}}1
+  {Ї}{{\selectfont\char136}}1
+  {Є}{{\selectfont\char153}}1
+  {Ґ}{{\selectfont\char128}}1
+  {\{}{{{\color{brackets}\{}}}1 % Цвет скобок {
+  {\}}{{{\color{brackets}\}}}}1 % Цвет скобок }
+}
+ 
+ % Для настройки заголовка кода
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{сaptiontext}}
+\DeclareCaptionFormat{listing}{\parbox{\linewidth}{\colorbox{сaptionbk}{\parbox{\linewidth}{#1#2#3}}\vskip-4pt}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+\renewcommand{\lstlistingname}{Код} % Переименование Listings в нужное именование структуры
+
+
+%------------------------------------------------------------------------------
+
+\author{В.~Е.~Бушин}
+\title{Сети ЭВМ и телекоммуникации}
+\begin{document}
+\maketitle
+\chapter{Задание}
+Разработать приложение–клиент и приложение–сервер пла-
+тежной системы. Участники платежной системы имеют электронные ко-
+шельки. Электронный кошелек имеет уникальный номер. При регистрации
+пользователя в платежной системе на его счет зачисляется определенная
+сумма. Пользователя платежной системы могут осуществлять платежи
+друг другу через приложение–сервер.
+\section{Функциональные требования}
+Серверное приложение должно реализовывать следующие функции:
+\begin{enumerate}	
+	\item Прослушивание определенного порта
+\item Обработка запросов на подключение по этому порту от клиентов
+платежной системы
+\item  Поддержка одновременной работы нескольких клиентов платежной
+системы через механизм нитей
+\item  Прием запросов от клиента на регистрацию пользователя, передачу
+списка электронных кошельков пользователей платежной системы,
+осуществление платежей одного пользователя другому, проверка состояния счета кошелька
+\item  Осуществление добавления пользователя в платежную систему, хранение и изменение состояния электронных кошельков в зависимости
+от платежей пользователей
+\item  Передача запросов на платежи от одного пользователя другому, подтверждений платежей, номера нового кошелька при регистрации
+пользователя, списка электронных кошельков
+\item Обработка запроса на отключение клиента
+\item  Принудительное отключение клиента
+	\end{enumerate}
+Клиентское приложение должно реализовывать следующие функции:
+\begin{enumerate}	
+	\item Установление соединения с сервером
+\item Передача запросов на передачу списка электронных кошельков
+пользователей платежной системы, платежи одного пользователя
+другому, проверку состояния счета кошелька
+\item Получение от сервера запросов на платеж от другого пользователя,
+результатов платежа
+\item Разрыв соединения
+\item Обработка ситуации отключения клиента сервером
+\end{enumerate}
+Разработанное клиентское приложение
+должно предоставлять пользователю настройку IP–адреса или доменного
+имени сервера платежной системы и номера порта, используемого сервером.
+\section{Нефункциональные требования}
+При подключении клиента происходит процесс идентификации с помощью логина или процесс регистрации нового пользователя. Пользователь не может вводить команды (кроме команд, связанных с идентификацией), пока идентификация не будет успешной. Один и тот же пользователь одновременно может быть идентифицирован с нескольких клиентских приложений.
+Серверное и клиентское приложения должны работать на разных ОС.
+\section{Накладываемые ограничения}
+Серверное приложение не поддерживает одновременное подключение более 100 клиентов. Максимальная длина вводимых пользователем строковых данных --- 255 символов.
+\chapter{Реализация для работы по протоколу TCP}
+\section{Прикладной протокол}
+\label{protocol_tcp}
+Команды, доступные клиентскому приложению приведены в таблице \ref{tab:commands}.
+	\begin{table}[h!]
+	\center
+	\begin{tabular}{|c|c|c|}
+	\hline 
+	Имя команды & Аргумент 1 & Аргумент 2 \\
+	\hline 
+	register & новый логин & -  \\ 
+	\hline 
+	sign in & логин & -  \\ 	
+	\hline 
+	show users & - & -  \\ 
+	\hline 
+	check wallet & - & - \\ 
+	\hline 
+	transfer & имя пользователя & кол-во денег \\ 
+	\hline 
+	quit & - & - \\ 
+	\hline 
+	\end{tabular}
+	\caption{Команды, доступные клиентскому приложению}
+	\label{tab:commands}
+	\end{table} 
+
+Описание команд:
+	\begin{enumerate}
+	\item register --- создание нового пользователя. Возможные ответы сервера:
+		\begin{itemize}
+		\item <<ok>> -- команда выполнена успешно;
+		\item <<not ok>> -- пользователь с таким именем уже существует.
+		\end{itemize}
+	\item sign in --- вход уже существующего пользователя. Возможные ответы сервера:
+		\begin{itemize}
+		\item <<ok>> -- команда выполнена успешно;
+		\item <<no match>> -- пользователя с таким именем не найдено.
+		\end{itemize}
+	\item show users --- запрос на передачу списка электронных кошельков
+пользователей платежной системы. В ответ сервер посылает список пользователей платёжной системы, в нём содержится имена пользователей и их идентификаторы.
+	\item check wallet --- запрос на проверку состояния электронного кошелька. Команда доступна только тестировщикам. В ответ сервер посылает количество денег на счету пользователя.
+	\item transfer --- запрос на платёж другому пользователю. Команда вводится в 2 этапа: 
+		\begin{itemize}
+		\item сначала пользователь вводит саму команду;
+		\item затем вводит имя пользователя кому будет проведён перевод и количество денег для перевода.
+		\end{itemize}
+		Возможные ответы сервера:
+		\begin{itemize}
+		\item <<ok>> -- команда выполнена успешно;
+		\item <<no match>> -- пользователя с таким именем не найдено.
+		\end{itemize}
+	\item quit --- выход из клиентского приложения.
+	\end{enumerate}
+
+\section{Архитектура приложения}
+\label{architechture_tcp}
+При подключении нового клиента сервер создает новый поток. Сначала происходит идентификация подключившегося пользователя. После идентификации начинается процесс работы. Клиент отправляет серверу различные команды, сервер выполняет эти команды и отправляет клиенту результаты выполнения команд.\\
+На сервере используются структура user, в которой содержится вся нужная информация о подключившемся клиенте. После идентификации вся информация о подключившимся клиенте заносится в эту структуру.\\
+
+Данные о пользователе хранятся в 2-х файлах:
+\begin{itemize}
+		\item us.txt --- в этом файле хранятся имена пользователей и их идентификаторы, разделённые табуляцией, в одной строчке содержится информация только об одном пользователе;
+		\item money.txt --- здесь хранятся идентификаторы пользователей и количество денег не их счету, структура записей такая же как и в файле us.txt.
+		\end{itemize}
+Пользователю на сервере доступны 2 команды:
+	\begin{enumerate}
+	\item show --- вывод списка подключенных клиентов с номерами их сокетов;
+	\item disconnect номер клиента --- отключение указанного клиента от сервера;
+	\end{enumerate}
+\section{Тестирование}
+\subsection{Описание тестового стенда и методики тестирования}
+\label{testing_stand_tcp}
+Серверное приложение реализовано в ОС Linux. Тестирование проводилось на ОС Debian 8.1. Сервер запускалася на виртуальной машине с подключением к сети через сетевой мост. Клиентское приложение реализовано в ОС Winwows. Тестирование проводилось на ОС Windows 10.
+\\Для тестирования приложений запускается сервер платежной системы и несколько клиентов. В процессе тестирования проверяются основные возможности приложений по передаче и приему сообщений.
+\subsection{Тестовый план и результаты тестирования}
+\label{testing_tcp}
+Процесс тестирования:
+	\begin{enumerate}
+	\item Проверка идентификации:
+		\begin{itemize}
+		\item Попытка войти с неправильным логином;
+		\item Попытка войти с правильным логином;
+		\item Попытка зарегистрироваться с уже занятым логином;
+		\item Попытка зарегистрироваться со свободным.
+		\end{itemize}
+Результаты с попытками входа приведены на рисунке 1, результаты с попытками регистрации приведены на рис.2 
+\begin{center}
+\includegraphics[scale=0.9]{1}\\
+Рис.1\\
+\end{center}
+\begin{center}
+\includegraphics[scale=0.9]{2}\\
+Рис.2\\
+\end{center}
+\item Проверка корректности выполнения всех команд клиента:
+		\begin{itemize}
+		\item Проверка функции передачи списка электронных кошельков
+пользователей платежной системы(рис. 3);
+\begin{center}
+\includegraphics[scale=0.9]{3}\\
+Рис.3\\
+\end{center}
+		\item Проверка функции проверки состояния электронного кошелька (рис. 4);
+\begin{center}
+\includegraphics[scale=1.2]{4}\\
+Рис.4\\
+\end{center}
+		\item Проверка функции платежа другому пользователю (рис. 5);
+\begin{center}
+\includegraphics[scale=1]{5}\\
+Рис.5\\
+\end{center}
+		\item Попытка выхода из клиентского приложения (рис. 6);
+\begin{center}
+\includegraphics[scale=1.2]{6}\\
+Рис.6\\
+\end{center}
+		\item Проверка корректной работы нескольких клиентов (рис. 7);
+\begin{center}
+\includegraphics[scale=0.9]{7}\\
+Рис.7\\
+\end{center}
+
+\item Проверка отключения клиентов от сервера (рис. 8).
+\begin{center}
+\includegraphics[scale=1]{8}\\
+Рис.8\\
+\end{center}
+		\end{itemize}
+\end{enumerate}
+\chapter{Реализация для работы по протоколу UDP}
+\section{Прикладной протокол}
+
+Прикладной протокол UDP-приложения совпадает с протоколом TCP-приложения, описанного ранее в пункте \ref{protocol_tcp}.
+
+\section{Архитектура приложения}
+Архитектура UDP-приложения совпадает с архитектурой TCP-приложения, которая была описана в пункте \ref{architechture_tcp}.	
+Небольшие изменения коснулись только клиентского приложения. Была добавлена структура Uclient, которая была нужна для того, чтобы в ней хранились сокет и структура sockaddr с адресом сервера. 
+
+\section{Тестирование}
+\subsection{Описание тестового стенда и методики тестирования}
+Тестовый стенд был описан ранее в пункте \ref{testing_stand_tcp}
+\subsection{Тестовый план и результаты тестирования}
+Первый этап тестирования совпадает с тестированием TCP-приложения (пункт \ref{testing_tcp}). Результаты тестирования совпали с тестированием TCP-приложения.\\
+Далее UDP реализация приложения была протестирована на устойчивость помехам в сети.
+\begin{enumerate}
+	\item Введение дополнительной задержки в сеть 150$\pm$50 мс (рис. 9)
+			\begin{center}
+\includegraphics[scale=1]{9}\\
+Рис.9\\
+\end{center}
+		При такой маленькой задержке проблем в работе приложения не возникет.
+	\item Введение задержки в сеть 1500$\pm$500 мс (рис. 10)
+\begin{center}
+\includegraphics[scale=1]{10}\\
+Рис.10\\
+\end{center}
+		При большой задержке клиент получает некоторых сообщения от сервера, но они приходят не сразу и команды выполняются за 2 секунды.
+		\item Введение потери 30\% пакетов (рис. 11)
+\begin{center}
+\includegraphics[scale=1]{11}\\
+Рис.11\\
+\end{center}
+		При таком проценте потери пакетов приложение практически сразу завершает работу: ответ от серверя теряется в сети и приложение зависает.
+		\item Введение дупликации 20\% пакетов (рис. 12)
+\begin{center}
+\includegraphics[scale=1]{12}\\
+Рис.12\\
+\end{center}
+		При таком проценте дупликации пакетов приложение продолжает функционировать, однако в его работе возникают неполадки, на некоторые команды данные отображаются по предыдущей команде.
+	\item Введение искажения 10\% пакетов (рис. 13)
+\begin{center}
+\includegraphics[scale=1]{13}\\
+Рис.13\\
+\end{center}
+		При таком проценте искажения пакетов приложение продолжает функционировать, однако есть большая вероятность того, что оно зависнет.
+	\item Введение зажержки 150$\pm$50мс, искажения 5\%, потери 5\%, дупликации 5\% пакетов (рис. 14)
+\begin{center}
+\includegraphics[scale=1]{14}\\
+Рис.14\\
+\end{center}
+		Приложение продолжает функционировать, однако могут возникать неполадки, так же приложение может зависнуть.
+	\end{enumerate}
+В целом можно сделать вывод, что приложение не готово к работе в реальной сети. При возникновении небольших помех в сети приложение продолжит корректно функционировать. Но при потери пакетов или резком понижении качества канала хотя бы по одному параметру приложение быстро зависнет свою работу из-за ошибки.
+\chapter{Проверка приложения с помощью Valgrind}
+Сначала была запущена проверка памяти с помощью команды valgrind --leak-check=full, проверка выдала 5 ошибок(рис. 15).
+\begin{center}
+\includegraphics[scale=0.9]{15}\\
+Рис.15\\
+\end{center}
+Одна из выявленных ошибок: "Conditional jump or move depends on uninitialised value(s)", эта ошибка была исправлена добавлением инициализации одной переменной типа int. Остальные ошибки были связаны с созданием нового потока при вызове функции pthread\_create(), эти ошибки были решены добавлением следующих атрибутов потока:
+\begin{lstlisting}
+    pthread_attr_t threadAttr;
+    pthread_attr_init(&threadAttr);
+    pthread_attr_setdetachstate(&threadAttr, PTHREAD_CREATE_DETACHED);
+\end{lstlisting}
+Затем была запущена проверка ошибок на многопоточность с помощью команды valgrind --tool=helgrind, проверка выдала ошибки гонки данных(рис. 16).
+\begin{center}
+\includegraphics[scale=0.9]{16}\\
+Рис.16\\
+\end{center}
+Данные ошибки были исправлены добавлением мьютекса pthread\_mutex\_t clientsMutex и добавлением функций pthread\_mutex\_lock() и pthread\_mutex\_unlock() для синхронизации при использовании общих объектов.
+\chapter{Выводы}
+В результате работы был создан прикладной протокол взаимодействия клиент-серверного приложения. В соответствии с прикладным протоколом было создано две реализации приложения для протоколов TCP и UDP. Клиентское и серверное приложения были реализованы для двух разных платформ: ОС Windows и Linux. При реализации использовались стандартные сокеты. Реализации сокетов для использованных ОС идентичны, портирование программ с одной платформы на другую выполняется достаточно просто.\\
+В результате работы была создана клиент-серверная платёжная система. Система состоит из сервера, хранящего сведения о клиентах и состоянии их кошельков.Все поставленные требования были выполнены. Тестирование программ прошло успешно, тесты показали корректность работы приложения в условиях локальной сети.
+\section{Реализация для TCP}
+Протокол TCP удобен для реализации пользовательских приложений, так как обеспечивает установление соединения и надёжную доставку пакетов. Протокол обеспечивает стабильное надёжное соединение, поэтому при реализации своего протокола не требуется волноваться об этом. Однако, эти дополнительные средства синхронизации требуют больше времени на доставку, т.е. скорость передачи данных ниже чем в UDP.\\
+С помощью утилиты tc при тестировании TCP реализации были просимулированы помехи в сети. Тестирование показало, что приложение надежно работает при низком и среднем уровне помех.
+\section{Реализация для UDP}
+Протокол UDP удобен для реализации приложений, не требующих точной доставки пакетов. Он позволяет передавать данные с большей скоростью, однако вероятность потери пакета при этом выше, чем в TCP. Поэтому, использовать данный протокол для реализации поставленной задачи не очень удобно. Требуется использовать дополнительные инструменты для подтверждения корректной доставки, т.е. каким-то образом <<симулировать>> TCP. Это неудобно и неэффективно.
+Для обеспечения более надежной доставки при использовании UDP было добавлено подтверждение доставки при обмене между клиентом и сервером.\\
+С помощью утилиты tc при тестировании UDP реализации были просимулированы помехи в сети. Тестирование показало, что при низком уровне помех приложение продолжает функционировать, однако могут появляться ошибки критические для приложения. Если в сети присутствуют сильные помехи, приложение начинает работать некорректно и может зависнуть с большой вероятностью.
+\chapter*{Приложения}
+\section*{Описание среды разработки}
+Серверное приложение реализовывалось в ОС Debian версии 8.1. Среда разработки --- Qt Creator версии 5.5. \\
+Клиентское приложения реализовывалось в ОС Windows 10. Среда разработки --- Microsoft Visual Studio 2010.
+\section*{Листинги}
+\subsection*{TCP сервер}
+Файл main.cpp
+\begin{lstlisting}
+#include <QCoreApplication>
+#include <pthread.h>
+#include <stdio.h>
+#include <cstdio>
+#include <stdlib.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <string>
+#include <unistd.h>
+#include "server.h"
+
+int main(int argc, char *argv[])
+{
+    int sock, newsock, port_num, n;
+    struct sockaddr_in serv_addr, cli_addr;
+    socklen_t clilen;
+    pid_t pid;
+
+    sock=socket(AF_INET, SOCK_STREAM, 0);
+
+    if (sock < 0)
+          {
+          perror("ERROR opening socket");
+          exit(1);
+          }
+    bzero((char*)&serv_addr, sizeof(serv_addr));
+    port_num=12345;
+
+    serv_addr.sin_family=AF_INET;
+    serv_addr.sin_addr.s_addr=INADDR_ANY;
+    serv_addr.sin_port=htons(port_num);
+
+    if(bind(sock,(struct sockaddr*)&serv_addr,sizeof(serv_addr))<0){
+        perror("ERROR on binding");
+        exit(1);
+    }
+
+    listen(sock,10);
+    clilen=sizeof(cli_addr);
+    printf("TCP Server Waiting for client on port 12345\n");
+    
+    pthread_attr_t threadAttr;
+    pthread_attr_init(&threadAttr);
+    pthread_attr_setdetachstate(&threadAttr, PTHREAD_CREATE_DETACHED);
+    
+    pthread_t serv_thread;
+    if (pthread_create(&serv_thread, NULL, server_handler, NULL) != 0) {
+            printf("Error while creating thread for server\n");
+        }
+
+    while (1) {
+         pthread_t thread;
+         newsock = accept(sock, (struct sockaddr *) &cli_addr, &clilen);
+
+         if (newsock < 0) {
+            perror("ERROR on accept");
+            close(sock);
+            exit(1);
+         }
+         pid=pthread_create(&thread, NULL, doprocessing, &newsock);
+         if (pid!=0){
+             printf("Error while creating new thread\n");
+             close(newsock);
+             break;
+         }
+      } /* end of while */
+    return 0;
+
+}
+\end{lstlisting}
+Файл server.cpp
+\begin{lstlisting}
+#include <stdio.h>
+#include <pthread.h>
+#include <string.h>
+#include <cstdlib>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include "server.h"
+#include "user.h"
+
+int clientsCount=0;
+user connected[maxClients];
+pthread_mutex_t clientsMutex;
+
+int authentication(int sock){
+    char buf[bufSize+1];
+    char new_client[]="new";
+    char exist_client[]="exist";
+    char numb[bufSize];
+    int n,check;
+    int res;
+    strcpy(numb,"\t");
+    bzero(buf, bufSize+1);
+    n=recv(sock, buf, bufSize, 0);//приём сообщения от клиента, в котором указано
+    //будет ли подключен новый пользователь или уже зарегистрированный
+    if (n < 0) {
+      perror("ERROR reading from socket");
+      exit(1);
+    }
+    if(strncmp(buf,exist_client,sizeof(exist_client)-1) == 0){
+        //уже существующий пользователь
+        bzero(buf,bufSize);
+        n=recv(sock, buf, bufSize, 0);
+        if (n < 0) {
+          perror("ERROR reading from socket");
+          pthread_exit(0);
+        }
+        check=check_user(buf);//проверка совпадает ли имя которое ввёл пользователь
+        //с именем в файле с пользователями
+        if (check < 0) {//нет совпадений
+            n = send(sock,"no_match",sizeof(buf), 0);//говорим клиенту, что нет совпадений
+            if (n < 0)
+            {
+                perror("ERROR writing to socket");
+                pthread_exit(0);
+            }
+            res=-1;
+        }
+        else{//есть совпадения
+            n = send(sock,"ok",bufSize, 0);//говорим клиенту, что всё ок
+            if (n < 0)
+            {
+                perror("ERROR writing to socket");
+                pthread_exit(0);
+            }
+            connected[clientsCount].sock=sock;
+            strcpy(connected[clientsCount].name,buf);
+            connected[clientsCount].uid=check;
+            connected[clientsCount].money=get_money(connected[clientsCount].uid);
+            res=1;
+            add();
+            printf("Connected client %s\n",buf);
+        }
+    }
+    else if(strncmp(buf,new_client,sizeof(new_client)-1) == 0){
+        //создание нового пользователя
+        bzero(buf,bufSize);
+        n=recv(sock, buf, bufSize, 0);
+        if (n < 0) {
+          perror("ERROR reading from socket");
+          pthread_exit(0);
+        }
+
+        check=check_user(buf);//проверка нет ли уже такого имени у кого-нибудь
+        if(check>0){//есть совпадения
+            n = send(sock,"not_ok",6, 0);//говорим клиенту, что не ок
+            if (n < 0)
+            {
+                perror("ERROR writing to socket");
+                pthread_exit(0);
+            }
+            res=-1;
+        }
+        else{//нет совпадений, клиент зарегистрирован
+            n = send(sock,"ok", 2, 0);//говорим клиенту, что всё ок
+            if (n < 0)
+            {
+                perror("ERROR writing to socket");
+                pthread_exit(0);
+            }
+            connected[clientsCount].sock=sock;
+            strcpy(connected[clientsCount].name,buf);
+            connected[clientsCount].money=6000;
+            printf("Connected client %s\n",buf);
+            connected[clientsCount].uid=set_newid();//получение id пользователя
+            FILE *file;
+            char *fname = "/home/user/project_t/us.txt";
+            file = fopen(fname,"a");
+            fprintf(file,"%s\t",connected[clientsCount].name);//запись в файл нового пользователя
+            fprintf(file,"%i\n",connected[clientsCount].uid);
+            fclose(file);
+            FILE *mon;
+            char *mon_name="/home/user/project_t/money.txt";
+            mon=fopen(mon_name,"a");
+            fprintf(mon,"%i\t",connected[clientsCount].uid);
+            fprintf(mon,"%i            \n",connected[clientsCount].money);
+            fclose(mon);
+            add();
+            res=1;
+        }
+    }
+    return res;
+}
+
+void* doprocessing (void* newsock) {
+   int n, socket;
+   int aut;
+   char request[bufSize];
+   char buffer[bufSize+1];
+   char command[]="show users";
+   char quit[]="quit";
+   bzero(request,bufSize);
+   bzero(buffer,bufSize+1);
+   int *tmp=(int*)newsock;
+   socket=*tmp;
+   do {
+           aut = authentication(socket); //процесс аутентификации клиента
+       } while (aut < 0);
+   while(recv(socket, request, bufSize, 0)>=0){
+       //n=recv(socket, request, bufSize, 0);
+//       if(n<0){
+//           perror("ERROR reading from socket");
+//           break;
+//       }
+       if(strncmp(request,quit,sizeof(quit)-1) == 0){
+           disconnect(socket);
+           break;
+       }
+       else if(strncmp(request,command,sizeof(command)-1) == 0){
+           show_users(socket);
+       }
+       else if(strcmp(request,"wallet") == 0){
+           check_wallet(socket);
+       }
+       else if(strcmp(request,"transf") == 0){
+           transfer(socket);
+       }
+       bzero(request,bufSize);
+   }
+   close(socket);
+}
+
+void show_users(int sock){
+    int n;
+    char tmp[bufSize];
+    char buffer[bufSize+1];
+    bzero(buffer,bufSize+1);
+    FILE *file;
+    char *fname = "/home/user/project_t/us.txt";
+    file = fopen(fname,"r");
+    if(file == NULL)
+    {
+        perror("ERROR on openning file with users");
+        pthread_exit(0);
+    }
+    while (fgets (tmp, sizeof(tmp), file) != NULL){
+        strncat(buffer,tmp,35);
+        printf("%s", tmp);
+    }
+    printf("\n");
+    fclose(file);
+    n = send(sock,buffer,sizeof(buffer), 0);
+    if (n < 0)
+    {
+        pthread_exit(0);
+    }
+}
+
+void check_wallet(int sock){
+    int n,uid;
+    char buffer[bufSize+1];
+    bzero(buffer,bufSize+1);
+    int i = 0;
+    int j=0;
+    for (i = 0; i <= clientsCount; ++i) {
+        if (connected[i].sock == sock){
+            uid=connected[i].uid;
+            connected[i].money=get_money(uid);
+            j=i;
+        }
+    }
+    sprintf(buffer,"%i", connected[j].money);
+    n = send(sock,buffer,sizeof(buffer), 0);
+    if (n < 0)
+    {
+        pthread_exit(0);
+    }
+}
+
+void transfer(int sock){
+    int n,value,money;
+    int dest=0;
+    char buffer[bufSize+1];
+    bzero(buffer,bufSize+1);
+    n=recv(sock, buffer, bufSize+1, 0);
+    if(n<0){
+        perror("ERROR reading from socket");
+        pthread_exit(0);
+    }
+    printf("%s\n",buffer);
+    char *tmp=strstr(buffer," ");
+    value=atoi(tmp);
+    strcpy(tmp,"\0");
+    dest=check_user(buffer);
+    if (dest < 0) {//нет совпадений
+        n = send(sock,"no_match",8, 0);//говорим клиенту, что нет совпадений
+        if (n < 0)
+        {
+            pthread_exit(0);
+        }
+    }
+    else{
+        money=get_money(dest);
+        money+=value;
+        set_money(dest,money);
+        int i,j;
+        for (i = 0; i <= clientsCount; ++i) {
+            if (connected[i].sock == sock){
+                dest=connected[i].uid;
+                connected[i].money=get_money(dest);
+                connected[i].money-=value;
+                j=i;
+            }
+        }
+        set_money(dest,connected[j].money);
+        n = send(sock,"ok",2, 0);
+        if (n < 0)
+        {
+            pthread_exit(0);
+        }
+    }
+}
+
+int check_user(char buf[]){
+    char name[bufSize+1];
+    char tmp[bufSize+1];
+    char id[10];
+    int res=-1;
+    int k=-1;
+    FILE *file;
+    char *fname = "/home/user/project_t/us.txt";
+    file = fopen(fname,"r");
+    bzero(name,bufSize+1);
+    strcpy(name,buf);
+    if(file == NULL)
+    {
+        perror("ERROR on openning file with users");
+        exit(1);
+    }
+    int i = 0;
+    bzero(tmp,bufSize+1);
+    while(fscanf(file,"%s", tmp)!=EOF){
+        //fscanf(file,"%s", tmp);
+        if(k==0){
+            strcpy(id,tmp);
+            res=atoi(id);
+            printf("%d\n",res);
+            break;
+        }
+        if(!(i%2)){
+            k=strcmp(name,tmp);
+            printf("%s\n",tmp);
+        }
+        i++;
+    }
+    fclose(file);
+    return res;
+}
+
+void add(){
+    pthread_mutex_lock(&clientsMutex);
+    clientsCount++;
+    pthread_mutex_unlock(&clientsMutex);
+}
+
+void disconnect(int sock){
+    pthread_mutex_lock(&clientsMutex);
+    int i = 0;
+    for (i = 0; i < clientsCount; ++i) {
+        if (connected[i].sock == sock)
+            break;
+    }
+    if (i != clientsCount) {
+        for (++i; i < clientsCount; ++i) {
+            connected[i - 1] = connected[i];
+        }
+        --clientsCount;
+    }
+    pthread_mutex_unlock(&clientsMutex);
+}
+
+void* server_handler(void*){
+    while (1) {
+            char command[bufSize];
+            bzero(command, bufSize);
+            scanf("%s", command);
+            if (strcmp(command, "show") == 0) {
+                for (int i = 0; i < clientsCount; ++i) {
+                    printf("%d : %s\n", connected[i].sock, connected[i].name);
+                }
+            } else if (strcmp(command, "disconnect") == 0) {
+                int sock = 0;
+                scanf("%d", &sock);
+                disconnect(sock);
+                int n = send(sock, "exit", 4, 0);
+                if (n < 0)
+                {
+                    perror("ERROR writing to socket");
+                    exit(1);
+                }
+                close(sock);
+            } else {
+                printf("Undefined command\n");
+            }
+        }
+}
+\end{lstlisting}
+Файл server.h
+\begin{lstlisting}
+#ifndef SERVER
+#define SERVER
+void *doprocessing(void *sock);
+void show_users(int sock);
+int authentication(int sock);
+int check_user(char buf[]);
+void check_wallet(int sock);
+void transfer(int sock);
+void *server_handler(void *);
+void disconnect(int sock);
+void add();
+#endif // SERVER
+\end{lstlisting}
+Файл user.cpp
+\begin{lstlisting}
+#include <stdio.h>
+#include <string.h>
+#include <cstdlib>
+#include "user.h"
+
+int get_money(int usid){//узнать количество денег, имеющееся у пользователя
+    int i=0;
+    int res,tmp=0;
+    int k=-1;
+    char buffer[bufSize+1];
+    FILE *file;
+    char *fname="/home/user/project_t/money.txt";
+    file = fopen(fname,"r");
+    if(file == NULL)
+    {
+        perror("ERROR on openning file with money");
+        exit(1);
+    }
+    bzero(buffer,bufSize+1);
+    while(!feof(file)){
+        fscanf(file,"%s", buffer);
+        tmp=atoi(buffer);
+        if(k==0){
+            res=tmp;            
+            break;
+        }
+        if(!(i%2)){
+            if(usid==tmp)
+                k=0;
+        }
+        i++;
+    }
+    fclose(file);
+    return res;
+}
+
+int set_money(int uid, int value){
+    char buf[15];
+    int tmp=0;
+    int before=0;
+    int after=0;
+    int spaces=0;
+    fpos_t pos;
+    FILE *file;
+    char *fname="/home/user/project_t/money.txt";
+    file = fopen(fname,"r+");
+    if(file == NULL)
+    {
+        perror("ERROR on openning file with money");
+        exit(1);
+    }
+    int k=1;
+    int i = 0;
+    while(fscanf(file,"%s", buf)!=EOF){
+        if(k==0){
+            before=ftell(file);
+            fsetpos(file,&pos);
+            fprintf(file,"\t%i",value);
+            after=ftell(file);
+            if(before>after) {
+                spaces += before - after;
+                while(spaces!=0){
+                    fputc(' ', file);
+                    spaces--;
+                }
+            }
+            fflush(file);
+            break;
+        }
+        fgetpos(file, &pos);
+        if(!(i%2)){
+            tmp=atoi(buf);
+            if(tmp==uid){
+                k=0;
+            }
+        }
+        i++;
+    }
+
+}
+
+int set_newid(){//задание нового id пользователя при регистрации
+    int res=0;
+    char uid[15];
+    FILE *file;
+    char *fname = "/home/user/project_t/us.txt";
+    file = fopen(fname,"r");
+    bzero(uid,sizeof(uid));
+    if(file == NULL)
+        {
+            perror("ERROR on openning file with users");
+            exit(1);
+        }
+    int i = 0;
+    while(fscanf(file,"%s", uid)!=EOF){
+        if(i%2){
+            res=atoi(uid);
+        }
+        i++;
+    }
+    fclose(file);
+    return res+1;
+}
+\end{lstlisting}
+Файл user.h
+\begin{lstlisting}
+#ifndef USER
+#define USER
+#define bufSize 255
+#define maxClients 100
+typedef struct{
+    char name[bufSize];
+    int sock;
+    int uid;
+    int money;
+}user;
+
+//user();
+int set_newid();
+int get_money(int usid);
+int set_money(int uid, int value);
+#endif // USER
+\end{lstlisting}
+\subsection*{TCP клиент}
+Файл client.cpp
+\begin{lstlisting}
+//client
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+#pragma comment (lib, "Ws2_32.lib")
+#pragma comment (lib, "Mswsock.lib")
+#pragma comment (lib, "AdvApi32.lib")
+
+#define bufSize 255
+
+int authentication(int sockfd);
+void showUsers(int sockfd, char command[]);
+void checkWallet(int sockfd);
+void transfer(int sockfd);
+int disconnect(int sockfd, char* buf);
+
+int main(int argc, char *argv[]) {
+	WORD wVersionRequested = MAKEWORD(1, 1);       // Stuff for WSA functions
+	WSADATA wsaData;
+   int sockfd, portno, n;
+   int aut;
+   struct sockaddr_in serv_addr;
+   struct hostent *server;
+   char quit[]="quit";
+   char show[]="show users";
+   char wallet[]="check wallet";
+   char transf[]="transfer";
+   char buffer[bufSize+1];
+
+   WSAStartup(wVersionRequested, &wsaData);
+   //portno=12345;
+   if (argc < 3) {
+      fprintf(stderr,"usage %s hostname port\n", argv[0]);
+      exit(0);
+   }
+
+   portno = atoi(argv[2]);
+
+   /* Create a socket point */
+   sockfd = socket(AF_INET, SOCK_STREAM, 0);
+
+   if (sockfd < 0) {
+      perror("ERROR opening socket");
+      exit(1);
+   }
+
+   server = gethostbyname(argv[1]);
+   if (server == NULL) {
+      fprintf(stderr,"ERROR, no such host\n");
+      exit(0);
+   }
+
+   memset((char *) &serv_addr, 0, sizeof(serv_addr));
+   serv_addr.sin_family = AF_INET;
+   serv_addr.sin_addr.s_addr = inet_addr(argv[1]);
+   //strncpy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
+   serv_addr.sin_port = htons(portno);
+
+   /* Now connect to the server */
+   if (connect(sockfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0) {
+      perror("ERROR connecting");
+      exit(1);
+   }
+
+   /* Now ask for a message from the user, this message
+      * will be read by server
+   */
+   do {
+           aut = authentication(sockfd); //процесс аутентификации клиента
+       } while (aut < 0);
+   while (1){
+    printf("Enter the command: ");
+    memset(buffer, 0, bufSize+1);
+    fgets(buffer,bufSize+1,stdin);
+
+    if(strncmp(buffer,quit,sizeof(quit)-1) == 0){
+            n = send(sockfd, buffer, strlen(buffer),0);
+            if (n < 0) {
+                perror("ERROR writing to socket");
+                exit(1);
+            }
+            closesocket(sockfd);
+            break;
+    }
+    else if(strncmp(buffer,show,sizeof(show)-1) == 0){
+        showUsers(sockfd,buffer);
+    }
+    else if(strncmp(buffer, wallet,sizeof(wallet)-1) == 0){
+        checkWallet(sockfd);
+    }
+    else if(strncmp(buffer, transf,sizeof(transf)-1) == 0){
+        transfer(sockfd);
+    }
+    else{
+        printf("Undefined command\n");
+    }
+  }
+    return 0;
+}
+
+void showUsers(int sockfd, char command[]){
+    int n;
+    char buffer[bufSize+1];
+    memset(buffer, 0, bufSize);
+    strcpy(buffer,command);
+    n = send(sockfd, buffer, strlen(buffer),0);
+    if (n < 0) {
+        perror("ERROR writing to socket");
+        closesocket(sockfd);
+        exit(1);
+    }
+
+    /* Now read server response */
+    memset(buffer, 0, bufSize);
+    n = recv(sockfd, buffer, bufSize+1,0);    
+    if (n < 0) {
+      perror("ERROR reading from socket");
+      closesocket(sockfd);
+      exit(1);
+    }
+    disconnect(sockfd, buffer);
+    printf("%s\n",buffer);
+}
+
+void checkWallet(int sockfd){
+    int n;
+    char buffer[bufSize+1];
+    n=send(sockfd, "wallet", 6, 0);
+    if (n < 0) {
+        perror("ERROR writing to socket");
+        closesocket(sockfd);
+        exit(1);
+    }
+	memset(buffer, 0, bufSize+1);
+    n = recv(sockfd, buffer, bufSize+1,0);    
+    if (n < 0) {
+      perror("ERROR reading from socket");
+      closesocket(sockfd);
+      exit(1);
+    }
+    disconnect(sockfd, buffer);
+    printf("%s\n",buffer);
+}
+
+void transfer(int sockfd){
+    int n;
+    char tmp[bufSize];
+    char buffer[bufSize+1];
+    memset(buffer, 0, bufSize+1);
+    n=send(sockfd, "transf", 6, 0);
+    if (n < 0) {
+        perror("ERROR writing to socket");
+        closesocket(sockfd);
+        exit(1);
+    }
+    printf("To who and how much do you want transfer money?\n");
+    scanf("%s",buffer);
+    scanf("%s",tmp);
+    strcat(buffer," ");
+    strcat(buffer,tmp);
+    n=send(sockfd, buffer, bufSize+1, 0);
+    memset(buffer, 0, bufSize+1);
+    n=recv(sockfd, buffer, bufSize+1,0);
+    if (n < 0) {
+      perror("ERROR reading from socket");
+      closesocket(sockfd);
+      exit(1);
+    }
+    disconnect(sockfd, buffer);
+    if(strcmp(buffer,"no_match")==0){
+        printf("There is no user with such username\n");
+    }
+    else if(strcmp(buffer,"ok")==0){
+        printf("Operation done\n");
+    }
+    else{
+        printf("Some error occurs during the operation\n");
+    }
+}
+
+int disconnect(int sockfd, char* buf){
+    if (strcmp(buf, "exit") == 0) {
+            printf("Disconnected from server\n");
+            closesocket(sockfd);
+            exit(1);
+        }
+        else return -1;
+}
+
+int authentication(int sockfd){
+    char login[bufSize +1];
+    char reg[bufSize +1];
+    char buffer[bufSize +1];
+    char ok[]="ok";
+    char sign[]="sign in";
+    char registration[]="register";
+    int n;
+    int res=-1;
+    memset(buffer, 0, bufSize+1);
+    printf("Sign in or register\n");
+    fgets(buffer,bufSize+1,stdin);
+    //scanf("%s", &buffer);
+    if(strncmp(buffer,sign,sizeof(sign)-1) == 0){//вход существующего пользователя
+        printf("Enter your username:\n");
+        scanf("%s", &login);
+        n=send(sockfd,"exist",bufSize,0);//посылка серверу сообщения о том, что входит существующий пользователь
+        if (n < 0) {
+            perror("ERROR writing to socket");
+            closesocket(sockfd);
+            exit(1);
+        }
+        n=send(sockfd,login,bufSize,0);//посылка серверу имени пользователя
+        if (n < 0) {
+            perror("ERROR writing to socket");
+            closesocket(sockfd);
+            exit(1);
+        }
+        memset(buffer, 0, bufSize+1);
+        n = recv(sockfd, buffer, bufSize+1,0);//ответ от сервера, правильны ли данные или нет
+        if (n < 0) {
+            perror("ERROR reading from socket");
+            closesocket(sockfd);
+            exit(1);
+        }
+        disconnect(sockfd, buffer);
+        if(strncmp(buffer,ok,sizeof(ok)-1) == 0){//данные правильны
+            printf("Hello %s, you has successfully logined\n",login);
+            res=1;
+        }
+        else{//данные не правильны
+            printf("No such username. Type correct username or register\n");
+            res=-1;
+        }
+    }
+    else if(strncmp(buffer,registration,sizeof(registration)-1) == 0){//регистрация нового пользователя
+        printf("Create new username:\n");
+        scanf("%s", &reg);
+        n=send(sockfd,"new",bufSize,0);//посылка сообщения серверу о регистрации нового пользователя
+        if (n < 0) {
+            perror("ERROR writing to socket");
+            closesocket(sockfd);
+            exit(1);
+        }
+        n=send(sockfd,reg,bufSize,0);//посылка имени нового пользователя
+        if (n < 0) {
+            perror("ERROR writing to socket");
+            closesocket(sockfd);
+            exit(1);
+        }
+        memset(buffer, 0, bufSize+1);
+        n = recv(sockfd, buffer, bufSize+1,0);//ответ от сервера, правильны ли данные или нет
+        if (n < 0) {
+            perror("ERROR reading from socket");
+            closesocket(sockfd);
+            exit(1);
+        }
+        disconnect(sockfd, buffer);
+        if(strncmp(buffer,ok,sizeof(ok)-1) == 0){//данные правильны
+            printf("Hello %s, you has successfully registered and logined\n",reg);
+            res=1;
+        }
+        else{//данные не правильны
+            printf("User with this username is already existing. Create other username\n");
+        }
+     }
+    return res;
+}
+\end{lstlisting}
+\subsection*{UDP сервер}
+Файл main.cpp
+\begin{lstlisting}
+#include <QCoreApplication>
+#include <pthread.h>
+#include <stdio.h>
+#include <cstdio>
+#include <stdlib.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <string>
+#include <unistd.h>
+#include "server.h"
+
+
+int main(int argc, char *argv[])
+{
+    int sock, port_num;
+    struct sockaddr_in serv_addr;
+    socklen_t clilen;
+    pid_t pid;
+
+    sock=socket(AF_INET, SOCK_DGRAM, 0);
+
+    if (sock < 0)
+    {
+        perror("ERROR opening socket");
+        exit(1);
+    }
+    bzero((char*)&serv_addr, sizeof(serv_addr));
+    //port_num=12345;
+    port_num = atoi(argv[1]);
+
+    serv_addr.sin_family=AF_INET;
+    serv_addr.sin_addr.s_addr=INADDR_ANY;
+    serv_addr.sin_port=htons(port_num);
+
+    if(bind(sock,(struct sockaddr*)&serv_addr,sizeof(serv_addr))<0){
+        perror("ERROR on binding");
+        exit(1);
+    }
+
+    printf("UDP Server Waiting for client on port 12345\n");
+    
+    pthread_attr_t threadAttr;
+    pthread_attr_init(&threadAttr);
+    pthread_attr_setdetachstate(&threadAttr, PTHREAD_CREATE_DETACHED);
+
+    pthread_t serv_thread;
+    if (pthread_create(&serv_thread, NULL, server_handler, NULL) != 0) {
+        printf("Error while creating thread for server\n");
+    }
+
+    while (1) {
+        pthread_t thread;
+        user client = new_connection(sock);
+        pid=pthread_create(&thread, NULL, doprocessing, (void*)&client);
+        if (pid!=0){
+            printf("Error while creating new thread\n");
+            //break;
+        }
+    } /* end of while */
+    return 0;
+
+}
+\end{lstlisting}
+Файл server.cpp
+\begin{lstlisting}
+#include <stdio.h>
+#include <pthread.h>
+#include <string.h>
+#include <cstdlib>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include "server.h"
+
+int clientsCount=0;
+user connected[maxClients];
+pthread_mutex_t clientsMutex;
+
+user new_connection(int sockfd){
+    struct sockaddr_in clientaddr; /* client addr */
+    int clientlen = sizeof(clientaddr); /* byte size of client's address */
+    char buf[bufSize];
+    int err = 0;
+
+    bzero(buf, bufSize);
+    err = recvfrom(sockfd, buf, bufSize, 0, (struct sockaddr *) &clientaddr, (unsigned int*)&clientlen);
+    if (err < 0) {
+      perror("ERROR reading from socket");
+      exit(1);
+    }
+
+    int newsockfd;
+    uint16_t newport;
+    new_socket(&newsockfd, &newport);
+    bzero(buf, bufSize);
+    sprintf(buf, "%d", newport);
+    err = sendto(sockfd, buf, strlen(buf), 0, (struct sockaddr *) &clientaddr, clientlen);
+    if (err < 0) {
+      perror("ERROR writing to socket");
+      exit(1);
+    }
+
+    // create new socket for this client
+    struct sockaddr_in newclientaddr; /* client addr */
+    int newclientlen = sizeof(newclientaddr); /* byte size of client's address */
+    bzero(buf, bufSize);
+    err = recvfrom(newsockfd, buf, bufSize, 0, (struct sockaddr *) &newclientaddr, (unsigned int*)&newclientlen);
+    if (err < 0) {
+      perror("ERROR reading from socket");
+      exit(1);
+    }
+
+    user client;
+    client.cli_addr=newclientaddr;
+    client.clilen=newclientlen;
+    client.sock=newsockfd;
+    return client;
+}
+
+void new_socket(int* sockfd, uint16_t* port){
+    struct sockaddr_in serveraddr;
+    int err = 0;
+    *sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    *port = 12345 + (clientsCount + 1);
+    if(*sockfd<0){
+        perror("ERROR opening socket");
+        exit(1);
+    }
+    //int optval = 1;
+    //setsockopt(*sockfd, SOL_SOCKET, SO_REUSEADDR, (const void *)&optval , sizeof(int));
+
+    bzero((char *) &serveraddr, sizeof(serveraddr));
+    serveraddr.sin_family = AF_INET;
+    serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    serveraddr.sin_port =htons((unsigned short)*port);
+
+    err = bind(*sockfd, (struct sockaddr *) &serveraddr, sizeof(serveraddr));
+    if(err<0){
+        perror("ERROR on binding");
+        exit(1);
+    }
+}
+
+int authentication(user client){
+    char buf[bufSize+1];
+    char new_client[]="new";
+    char exist_client[]="exist";
+    char numb[bufSize];
+    int n,check;
+    int res;
+    strcpy(numb,"\t");
+    bzero(buf, bufSize+1);
+    n=recvfrom(client.sock, buf, bufSize, 0, (struct sockaddr *)&client.cli_addr, &client.clilen);//приём сообщения от клиента, в котором указано
+    //будет ли подключен новый пользователь или уже зарегистрированный
+    if (n < 0) {
+      perror("ERROR reading from socket");
+      exit(1);
+    }
+    if(strncmp(buf,exist_client,sizeof(exist_client)-1) == 0){
+        //уже существующий пользователь
+        bzero(buf,bufSize);
+        n=recvfrom(client.sock, buf, bufSize, 0, (struct sockaddr *) &client.cli_addr, &client.clilen);
+        if (n < 0) {
+          perror("ERROR reading from socket");
+          pthread_exit(0);
+        }
+        check=check_user(buf);//проверка совпадает ли имя которое ввёл пользователь
+        //с именем в файле с пользователями
+        if (check < 0) {//нет совпадений
+            n = sendto(client.sock,"no_match",sizeof(buf), 0, (struct sockaddr *) &client.cli_addr, client.clilen);//говорим клиенту, что нет совпадений
+            if (n < 0)
+            {
+                perror("ERROR writing to socket");
+                pthread_exit(0);
+            }
+            res=-1;
+        }
+        else{//есть совпадения
+            n = sendto(client.sock,"ok",bufSize, 0, (struct sockaddr *) &client.cli_addr, client.clilen);//говорим клиенту, что всё ок
+            if (n < 0)
+            {
+                perror("ERROR writing to socket");
+                pthread_exit(0);
+            }          
+            strcpy(client.name,buf);
+            client.uid=check;
+            client.money=get_money(client.uid);
+            res=1;
+            add(client);
+            printf("Connected client %s\n",buf);
+        }
+    }
+    else if(strncmp(buf,new_client,sizeof(new_client)-1) == 0){
+        //создание нового пользователя
+        bzero(buf,bufSize);
+        n=recvfrom(client.sock, buf, bufSize, 0, (struct sockaddr *) &client.cli_addr, &client.clilen);
+        if (n < 0) {
+          perror("ERROR reading from socket");
+          pthread_exit(0);
+        }
+
+        check=check_user(buf);//проверка нет ли уже такого имени у кого-нибудь
+        if(check>0){//есть совпадения
+            n = sendto(client.sock,"not_ok",6, 0, (struct sockaddr *) &client.cli_addr, client.clilen);//говорим клиенту, что не ок
+            if (n < 0)
+            {
+                perror("ERROR writing to socket");
+                pthread_exit(0);
+            }
+            res=-1;
+        }
+        else{//нет совпадений, клиент зарегистрирован
+            n = sendto(client.sock,"ok", 2, 0, (struct sockaddr *) &client.cli_addr, client.clilen);//говорим клиенту, что всё ок
+            if (n < 0)
+            {
+                perror("ERROR writing to socket");
+                pthread_exit(0);
+            }            
+            strcpy(client.name,buf);
+            client.money=6000;
+            printf("Connected client %s\n",buf);
+            client.uid=set_newid();//получение id пользователя
+            FILE *file;
+            char *fname = "/home/user/project_t/us.txt";
+            file = fopen(fname,"a");
+            fprintf(file,"%s\t",client.name);//запись в файл нового пользователя
+            fprintf(file,"%i\n",client.uid);
+            fclose(file);
+            FILE *mon;
+            char *mon_name="/home/user/project_t/money.txt";
+            mon=fopen(mon_name,"a");
+            fprintf(mon,"%i\t",client.uid);
+            fprintf(mon,"%i            \n",client.money);
+            fclose(mon);
+            add(client);
+            res=1;
+        }
+    }
+    return res;
+}
+
+void* doprocessing (void* c) {
+   user* cli = (user*) c;
+   user client = *cli;
+   int aut;
+   char request[bufSize];
+   char buffer[bufSize+1];
+   char command[]="show users";
+   char quit[]="quit";
+   bzero(request,bufSize);
+   bzero(buffer,bufSize+1);
+   do {
+           aut = authentication(client); //процесс аутентификации клиента
+       } while (aut < 0);
+   while(recvfrom(client.sock, request, bufSize, 0, (struct sockaddr *) &client.cli_addr, &client.clilen)>=0){
+       //n=recv(socket, request, bufSize, 0);
+//       if(n<0){
+//           perror("ERROR reading from socket");
+//           break;
+//       }
+       if(strncmp(request,quit,sizeof(quit)-1) == 0){
+           disconnect(client.sock);
+           break;
+       }
+       else if(strncmp(request,command,sizeof(command)-1) == 0){
+           show_users(client);
+       }
+       else if(strcmp(request,"wallet") == 0){
+           check_wallet(client);
+       }
+       else if(strcmp(request,"transf") == 0){
+           transfer(client);
+       }
+       bzero(request,bufSize);
+   }
+   close(client.sock);
+}
+
+void show_users(user client){
+    int n;
+    char tmp[bufSize];
+    char buffer[bufSize+1];
+    bzero(buffer,bufSize+1);
+    FILE *file;
+    char *fname = "/home/user/project_t/us.txt";
+    file = fopen(fname,"r");
+    if(file == NULL)
+    {
+        perror("ERROR on openning file with users");
+        pthread_exit(0);
+    }
+    while (fgets (tmp, sizeof(tmp), file) != NULL){
+        strncat(buffer,tmp,35);
+        printf("%s", tmp);
+    }
+    printf("\n");
+    fclose(file);
+    n = sendto(client.sock,buffer,sizeof(buffer), 0, (struct sockaddr *) &client.cli_addr, client.clilen);
+    if (n < 0)
+    {
+        pthread_exit(0);
+    }
+}
+
+void check_wallet(user client){
+    int n,uid;
+    char buffer[bufSize+1];
+    bzero(buffer,bufSize+1);
+    int i = 0;
+    int j=0;
+    for (i = 0; i <= clientsCount; ++i) {
+        if (connected[i].sock == client.sock){
+            uid=connected[i].uid;
+            connected[i].money=get_money(uid);
+            j=i;
+        }
+    }
+    sprintf(buffer,"%i", connected[j].money);
+    n = sendto(client.sock,buffer,sizeof(buffer), 0, (struct sockaddr *) &client.cli_addr, client.clilen);
+    if (n < 0)
+    {
+        pthread_exit(0);
+    }
+}
+
+void transfer(user client){
+    int n,value,money;
+    int dest=0;
+    char buffer[bufSize+1];
+    bzero(buffer,bufSize+1);
+    n=recvfrom(client.sock, buffer, bufSize+1, 0, (struct sockaddr *) &client.cli_addr, &client.clilen);
+    if(n<0){
+        perror("ERROR reading from socket");
+        pthread_exit(0);
+    }
+    printf("%s\n",buffer);
+    char *tmp=strstr(buffer," ");
+    value=atoi(tmp);
+    strcpy(tmp,"\0");
+    dest=check_user(buffer);
+    if (dest < 0) {//нет совпадений
+        n = sendto(client.sock,"no_match",8, 0, (struct sockaddr *) &client.cli_addr, client.clilen);//говорим клиенту, что нет совпадений
+        if (n < 0)
+        {
+            pthread_exit(0);
+        }
+    }
+    else{
+        money=get_money(dest);
+        money+=value;
+        set_money(dest,money);
+        int i,j;
+        for (i = 0; i <= clientsCount; ++i) {
+            if (connected[i].sock == client.sock){
+                connected[i].money-=value;
+                dest=connected[i].uid;
+                j=i;
+            }
+        }
+        set_money(dest,connected[j].money);
+        n = sendto(client.sock,"ok",2, 0, (struct sockaddr *) &client.cli_addr, client.clilen);
+        if (n < 0)
+        {
+            pthread_exit(0);
+        }
+    }
+}
+
+int check_user(char buf[]){
+    char name[bufSize+1];
+    char tmp[bufSize+1];
+    char id[10];
+    int res=-1;
+    int k;
+    FILE *file;
+    char *fname = "/home/user/project_t/us.txt";
+    file = fopen(fname,"r");
+    bzero(name,bufSize+1);
+    strcpy(name,buf);
+    if(file == NULL)
+    {
+        perror("ERROR on openning file with users");
+        exit(1);
+    }
+    int i = 0;
+    bzero(tmp,bufSize+1);
+    while(fscanf(file,"%s", tmp)!=EOF){
+        //fscanf(file,"%s", tmp);
+        if(k==0){
+            strcpy(id,tmp);
+            res=atoi(id);
+            printf("%d\n",res);
+            break;
+        }
+        if(!(i%2)){
+            k=strcmp(name,tmp);
+            printf("%s\n",tmp);
+        }
+        i++;
+    }
+    fclose(file);
+    return res;
+}
+
+void add(user client){
+    pthread_mutex_lock(&clientsMutex);
+    connected[clientsCount++]=client;
+    pthread_mutex_unlock(&clientsMutex);
+}
+
+void disconnect(int sock){
+    pthread_mutex_lock(&clientsMutex);
+    int i = 0;
+    for (i = 0; i < clientsCount; ++i) {
+        if (connected[i].sock == sock)
+            break;
+    }
+    if (i != clientsCount) {
+        int n = sendto(connected[i].sock, "exit", 4, 0, (struct sockaddr *)&connected[i].cli_addr, connected[i].clilen);
+        if (n < 0)
+        {
+            perror("ERROR writing to socket");
+            exit(1);
+        }
+        close(sock);
+        for (++i; i < clientsCount; ++i) {
+            connected[i - 1] = connected[i];
+        }
+        --clientsCount;
+    }
+    pthread_mutex_unlock(&clientsMutex);
+}
+
+void* server_handler(void*){
+    while (1) {
+            char command[bufSize];
+            bzero(command, bufSize);
+            scanf("%s", command);
+            if (strcmp(command, "show") == 0) {
+                for (int i = 0; i < clientsCount; ++i) {
+                    printf("%d : %s\n", connected[i].sock, connected[i].name);
+                }
+            } else if (strcmp(command, "disconnect") == 0) {
+                int sock = 0;
+                scanf("%d", &sock);
+                disconnect(sock);
+            } else {
+                printf("Undefined command\n");
+            }
+        }
+}
+\end{lstlisting}
+Файл server.h
+\begin{lstlisting}
+#ifndef SERVER
+#define SERVER
+#include "user.h"
+void *doprocessing(void *c);
+void show_users(user client);
+int authentication(user client);
+int check_user(char buf[]);
+void check_wallet(user client);
+void transfer(user client);
+void *server_handler(void *);
+void disconnect(int sock);
+void add(user client);
+user new_connection(int sockfd);
+void new_socket(int* sockfd, uint16_t* port);
+#endif // SERVER
+\end{lstlisting}
+Файл user.cpp
+\begin{lstlisting}
+#include <stdio.h>
+#include <string.h>
+#include <cstdlib>
+#include "user.h"
+
+int get_money(int usid){//узнать количество денег, имеющееся у пользователя
+    int i=0;
+    int res,tmp=0;
+    int k=-1;
+    char buffer[bufSize+1];
+    FILE *file;
+    char *fname="/home/user/project_t/money.txt";
+    file = fopen(fname,"r");
+    if(file == NULL)
+    {
+        perror("ERROR on openning file with money");
+        exit(1);
+    }
+    bzero(buffer,bufSize+1);
+    while(!feof(file)){
+        fscanf(file,"%s", buffer);
+        tmp=atoi(buffer);
+        if(k==0){
+            res=tmp;            
+            break;
+        }
+        if(!(i%2)){
+            if(usid==tmp)
+                k=0;
+        }
+        i++;
+    }
+    fclose(file);
+    return res;
+}
+
+int set_money(int uid, int value){
+    char buf[15];
+    int tmp=0;
+    int before=0;
+    int after=0;
+    int spaces=0;
+    fpos_t pos;
+    FILE *file;
+    char *fname="/home/user/project_t/money.txt";
+    file = fopen(fname,"r+");
+    if(file == NULL)
+    {
+        perror("ERROR on openning file with money");
+        exit(1);
+    }
+    int k=1;
+    int i = 0;
+    while(fscanf(file,"%s", buf)!=EOF){
+        if(k==0){
+            before=ftell(file);
+            fsetpos(file,&pos);
+            fprintf(file,"\t%i",value);
+            after=ftell(file);
+            if(before>after) {
+                spaces += before - after;
+                while(spaces!=0){
+                    fputc(' ', file);
+                    spaces--;
+                }
+            }
+            fflush(file);
+            break;
+        }
+        fgetpos(file, &pos);
+        if(!(i%2)){
+            tmp=atoi(buf);
+            if(tmp==uid){
+                k=0;
+            }
+        }
+        i++;
+    }
+
+}
+
+int set_newid(){//задание нового id пользователя при регистрации
+    int res=0;
+    char uid[15];
+    FILE *file;
+    char *fname = "/home/user/project_t/us.txt";
+    file = fopen(fname,"r");
+    bzero(uid,sizeof(uid));
+    if(file == NULL)
+        {
+            perror("ERROR on openning file with users");
+            exit(1);
+        }
+    int i = 0;
+    while(fscanf(file,"%s", uid)!=EOF){
+        if(i%2){
+            res=atoi(uid);
+        }
+        i++;
+    }
+    fclose(file);
+    return res+1;
+}
+\end{lstlisting}
+Файл user.h
+\begin{lstlisting}
+#ifndef USER
+#define USER
+#include <netdb.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#define bufSize 255
+#define maxClients 100
+typedef struct{
+    char name[bufSize];
+    int sock;
+    int uid;
+    int money;
+    struct sockaddr_in cli_addr;
+    socklen_t clilen;
+}user;
+
+//user();
+int set_newid();
+int get_money(int usid);
+int set_money(int uid, int value);
+#endif // USER
+\end{lstlisting}
+\subsection*{UDP клиент}
+Файл client.cpp
+\begin{lstlisting}
+//client
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+#pragma comment (lib, "Ws2_32.lib")
+#pragma comment (lib, "Mswsock.lib")
+#pragma comment (lib, "AdvApi32.lib")
+
+#define bufSize 255
+
+typedef struct {
+	int sockfd;
+	struct sockaddr_in serv_addr;
+	int clilen;
+} Uclient;
+
+int authentication(Uclient client);
+void showUsers(char command[], Uclient client);
+void checkWallet(Uclient client);
+void transfer(Uclient client);
+int disconnect(int sockfd, char* buf);
+
+int main(int argc, char *argv[]) {
+	WORD wVersionRequested = MAKEWORD(2, 2);       // Stuff for WSA functions
+	WSADATA wsaData;
+   int sock, portno, n=0;
+   int aut;
+   struct sockaddr_in serv_addr;
+   struct hostent *server;
+   char quit[]="quit";
+   char show[]="show users";
+   char wallet[]="check wallet";
+   char transf[]="transfer";
+   char buffer[bufSize+1];
+   char buf[bufSize];
+
+   WSAStartup(wVersionRequested, &wsaData);
+   //portno=12345;
+   if (argc < 3) {
+      fprintf(stderr,"usage %s hostname port\n", argv[0]);
+      exit(0);
+   }
+
+   portno = atoi(argv[2]);
+
+   /* Create a socket point */
+   sock = socket(AF_INET, SOCK_DGRAM, 0);
+
+   if (sock == SOCKET_ERROR) {
+      perror("ERROR opening socket");
+      exit(1);
+   }
+
+   server = gethostbyname(argv[1]);
+   if (server == NULL) {
+      fprintf(stderr,"ERROR, no such host\n");
+      exit(0);
+   }
+
+   memset((char *) &serv_addr, 0, sizeof(serv_addr));
+   serv_addr.sin_family = AF_INET;
+   serv_addr.sin_addr.s_addr = inet_addr(argv[1]);
+   //strncpy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
+   serv_addr.sin_port = htons(portno);
+   int len = sizeof(serv_addr);
+
+
+	n = sendto(sock, "client", strlen("client"), 0, (struct sockaddr *) &serv_addr, len);
+	if (n < 0) {
+        perror("ERROR writing to socket");
+        closesocket(sock);
+        exit(1);
+    }
+
+	//recieve new port
+	memset(buf, 0, bufSize);
+	n = recvfrom(sock, buf, bufSize, 0, (struct sockaddr *) &serv_addr, &len);
+	if (n < 0) {
+      perror("ERROR reading from socket");
+      closesocket(sock);
+      exit(1);
+    } 
+	disconnect(sock, buf);
+	//close old socket
+	closesocket(sock);
+	WSACleanup();
+
+	int newport = atoi(buf);
+
+	WSADATA wsa2;
+	if (WSAStartup(MAKEWORD(2, 2), &wsa2) != 0) {
+		exit(EXIT_FAILURE);
+	}
+
+	struct sockaddr_in new_addr;
+	int sockfd, new_slen = sizeof(new_addr);
+
+	//create socket
+	if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) == SOCKET_ERROR) {
+		exit(EXIT_FAILURE);
+	}
+
+	//setup address structure
+	memset((char *)&new_addr, 0, new_slen);
+	new_addr.sin_family = AF_INET;
+	new_addr.sin_port = htons(newport);
+	new_addr.sin_addr.S_un.S_addr = inet_addr(argv[1]);
+	
+	n = sendto(sockfd, "newclient", strlen("newclient"), 0, (struct sockaddr *) &new_addr, new_slen);
+	if (n < 0) {
+      perror("ERROR reading from socket");
+      closesocket(sockfd);
+      exit(1);
+    } 
+
+	Uclient client;
+	client.sockfd = sockfd;
+	client.serv_addr = new_addr;
+	client.clilen = sizeof(new_addr);
+
+   do {
+           aut = authentication(client); //процесс аутентификации клиента
+       } while (aut < 0);
+   while (1){
+    printf("Enter the command: ");
+    memset(buffer, 0, bufSize+1);
+    fgets(buffer,bufSize+1,stdin);
+
+    if(strncmp(buffer,quit,sizeof(quit)-1) == 0){
+            n = sendto(client.sockfd, buffer, strlen(buffer),0, (struct sockaddr*)&client.serv_addr, client.clilen);
+            if (n < 0) {
+                perror("ERROR writing to socket");
+                exit(1);
+            }
+            closesocket(client.sockfd);
+            break;
+    }
+    else if(strncmp(buffer,show,sizeof(show)-1) == 0){
+        showUsers(buffer, client);
+    }
+    else if(strncmp(buffer, wallet,sizeof(wallet)-1) == 0){
+        checkWallet(client);
+    }
+    else if(strncmp(buffer, transf,sizeof(transf)-1) == 0){
+        transfer(client);
+    }
+    else{
+        printf("Undefined command\n");
+    }
+  }
+    return 0;
+}
+
+void showUsers(char command[], Uclient client){
+    int n;
+    char buffer[bufSize+1];
+    memset(buffer, 0, bufSize);
+    strcpy(buffer,command);
+	n = sendto(client.sockfd, buffer, strlen(buffer), 0, (struct sockaddr*)&client.serv_addr, client.clilen);
+    if (n < 0) {
+        perror("ERROR writing to socket");
+        closesocket(client.sockfd);
+        exit(1);
+    }
+
+    /* Now read server response */
+    memset(buffer, 0, bufSize);
+	n = recvfrom(client.sockfd, buffer, bufSize+1, 0, (struct sockaddr*)&client.serv_addr, &client.clilen);    
+    if (n < 0) {
+      perror("ERROR reading from socket");
+      closesocket(client.sockfd);
+      exit(1);
+    }
+    disconnect(client.sockfd, buffer);
+    printf("%s\n",buffer);
+}
+
+void checkWallet(Uclient client){
+    int n;
+    char buffer[bufSize+1];
+    n=sendto(client.sockfd, "wallet", 6, 0, (struct sockaddr*)&client.serv_addr, client.clilen);
+    if (n < 0) {
+        perror("ERROR writing to socket");
+        closesocket(client.sockfd);
+        exit(1);
+    }
+	memset(buffer, 0, bufSize+1);
+    n = recvfrom(client.sockfd, buffer, bufSize+1, 0, (struct sockaddr*)&client.serv_addr, &client.clilen);    
+    if (n < 0) {
+      perror("ERROR reading from socket");
+      closesocket(client.sockfd);
+      exit(1);
+    }
+    disconnect(client.sockfd, buffer);
+    printf("%s\n",buffer);
+}
+
+void transfer(Uclient client){
+    int n;
+    char tmp[bufSize];
+    char buffer[bufSize+1];
+    memset(buffer, 0, bufSize+1);
+    n=sendto(client.sockfd, "transf", 6, 0, (struct sockaddr*)&client.serv_addr, client.clilen);
+    if (n < 0) {
+        perror("ERROR writing to socket");
+        closesocket(client.sockfd);
+        exit(1);
+    }
+    printf("To who and how much do you want transfer money?\n");
+    scanf("%s",buffer);
+    scanf("%s",tmp);
+    strcat(buffer," ");
+    strcat(buffer,tmp);
+    n=sendto(client.sockfd, buffer, bufSize+1, 0, (struct sockaddr*)&client.serv_addr, client.clilen);
+    memset(buffer, 0, bufSize+1);
+    n=recvfrom(client.sockfd, buffer, bufSize+1, 0, (struct sockaddr*)&client.serv_addr, &client.clilen);
+    if (n < 0) {
+      perror("ERROR reading from socket");
+      closesocket(client.sockfd);
+      exit(1);
+    }
+    disconnect(client.sockfd, buffer);
+    if(strcmp(buffer,"no_match")==0){
+        printf("There is no user with such username\n");
+    }
+    else if(strcmp(buffer,"ok")==0){
+        printf("Operation done\n");
+    }
+    else{
+        printf("Some error occurs during the operation\n");
+    }
+}
+
+int disconnect(int sockfd, char* buf){
+    if (strcmp(buf, "exit") == 0) {
+            printf("Disconnected from server\n");
+            closesocket(sockfd);
+            exit(1);
+        }
+        else return -1;
+}
+
+int authentication(Uclient client){
+    char login[bufSize +1];
+    char reg[bufSize +1];
+    char buffer[bufSize +1];
+    char ok[]="ok";
+    char sign[]="sign in";
+    char registration[]="register";
+    int n;
+    int res=-1;
+    memset(buffer, 0, bufSize+1);
+    printf("Sign in or register\n");
+    fgets(buffer,bufSize+1,stdin);
+    //scanf("%s", &buffer);
+    if(strncmp(buffer,sign,sizeof(sign)-1) == 0){//вход существующего пользователя
+        printf("Enter your username:\n");
+        scanf("%s", &login);
+        n=sendto(client.sockfd,"exist",bufSize, 0, (struct sockaddr*)&client.serv_addr, client.clilen);//посылка серверу сообщения о том, что входит существующий пользователь
+        if (n < 0) {
+            perror("ERROR writing to socket");
+            closesocket(client.sockfd);
+            exit(1);
+        }
+        n=sendto(client.sockfd,login,bufSize, 0, (struct sockaddr*)&client.serv_addr, client.clilen);//посылка серверу имени пользователя
+        if (n < 0) {
+            perror("ERROR writing to socket");
+            closesocket(client.sockfd);
+            exit(1);
+        }
+        memset(buffer, 0, bufSize+1);
+        n = recvfrom(client.sockfd, buffer, bufSize+1, 0, (struct sockaddr*)&client.serv_addr, &client.clilen);//ответ от сервера, правильны ли данные или нет
+        if (n < 0) {
+            perror("ERROR reading from socket");
+            closesocket(client.sockfd);
+            exit(1);
+        }
+        disconnect(client.sockfd, buffer);
+        if(strncmp(buffer,ok,sizeof(ok)-1) == 0){//данные правильны
+            printf("Hello %s, you has successfully logined\n",login);
+            res=1;
+        }
+        else{//данные не правильны
+            printf("No such username. Type correct username or register\n");
+            res=-1;
+        }
+    }
+    else if(strncmp(buffer,registration,sizeof(registration)-1) == 0){//регистрация нового пользователя
+        printf("Create new username:\n");
+        scanf("%s", &reg);
+        n=sendto(client.sockfd,"new",bufSize, 0, (struct sockaddr*)&client.serv_addr, client.clilen);//посылка сообщения серверу о регистрации нового пользователя
+        if (n < 0) {
+            perror("ERROR writing to socket");
+            closesocket(client.sockfd);
+            exit(1);
+        }
+        n=sendto(client.sockfd,reg,bufSize, 0, (struct sockaddr*)&client.serv_addr, client.clilen);//посылка имени нового пользователя
+        if (n < 0) {
+            perror("ERROR writing to socket");
+            closesocket(client.sockfd);
+            exit(1);
+        }
+        memset(buffer, 0, bufSize+1);
+        n = recvfrom(client.sockfd, buffer, bufSize+1, 0, (struct sockaddr*)&client.serv_addr, &client.clilen);//ответ от сервера, правильны ли данные или нет
+        if (n < 0) {
+            perror("ERROR reading from socket");
+            closesocket(client.sockfd);
+            exit(1);
+        }
+        disconnect(client.sockfd, buffer);
+        if(strncmp(buffer,ok,sizeof(ok)-1) == 0){//данные правильны
+            printf("Hello %s, you has successfully registered and logined\n",reg);
+            res=1;
+        }
+        else{//данные не правильны
+            printf("User with this username is already existing. Create other username\n");
+        }
+     }
+    return res;
+}
+\end{lstlisting}
+\end{document}
