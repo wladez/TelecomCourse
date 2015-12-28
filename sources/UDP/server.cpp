@@ -9,6 +9,7 @@
 
 int clientsCount=0;
 user connected[maxClients];
+pthread_mutex_t clientsMutex;
 
 user new_connection(int sockfd){
     struct sockaddr_in clientaddr; /* client addr */
@@ -305,7 +306,7 @@ int check_user(char buf[]){
     char tmp[bufSize+1];
     char id[10];
     int res=-1;
-    int k;
+    int k=-1;
     FILE *file;
     char *fname = "/home/user/project_t/us.txt";
     file = fopen(fname,"r");
@@ -337,28 +338,32 @@ int check_user(char buf[]){
 }
 
 void add(user client){
+    pthread_mutex_lock(&clientsMutex);
     connected[clientsCount++]=client;
+    pthread_mutex_unlock(&clientsMutex);
 }
 
 void disconnect(int sock){
+    pthread_mutex_lock(&clientsMutex);
     int i = 0;
-        for (i = 0; i < clientsCount; ++i) {
-            if (connected[i].sock == sock)
-                break;
+    for (i = 0; i < clientsCount; ++i) {
+        if (connected[i].sock == sock)
+            break;
+    }
+    if (i != clientsCount) {
+        int n = sendto(connected[i].sock, "exit", 4, 0, (struct sockaddr *)&connected[i].cli_addr, connected[i].clilen);
+        if (n < 0)
+        {
+            perror("ERROR writing to socket");
+            exit(1);
         }
-        if (i != clientsCount) {
-            int n = sendto(connected[i].sock, "exit", 4, 0, (struct sockaddr *)&connected[i].cli_addr, connected[i].clilen);
-            if (n < 0)
-            {
-                perror("ERROR writing to socket");
-                exit(1);
-            }
-            close(sock);
-            for (++i; i < clientsCount; ++i) {
-                connected[i - 1] = connected[i];
-            }
-            --clientsCount;
+        close(sock);
+        for (++i; i < clientsCount; ++i) {
+            connected[i - 1] = connected[i];
         }
+        --clientsCount;
+    }
+    pthread_mutex_unlock(&clientsMutex);
 }
 
 void* server_handler(void*){

@@ -42,6 +42,10 @@ int main(int argc, char *argv[])
     clilen=sizeof(cli_addr);
     printf("TCP Server Waiting for client on port 12345\n");
 
+    pthread_attr_t threadAttr;
+    pthread_attr_init(&threadAttr);
+    pthread_attr_setdetachstate(&threadAttr, PTHREAD_CREATE_DETACHED);
+
     pthread_t serv_thread;
     if (pthread_create(&serv_thread, NULL, server_handler, NULL) != 0) {
             printf("Error while creating thread for server\n");

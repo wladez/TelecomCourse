@@ -10,6 +10,7 @@
 
 int clientsCount=0;
 user connected[maxClients];
+pthread_mutex_t clientsMutex;
 
 int authentication(int sock){
     //user connected;
@@ -58,7 +59,7 @@ int authentication(int sock){
             connected[clientsCount].uid=check;
             connected[clientsCount].money=get_money(connected[clientsCount].uid);
             res=1;
-            clientsCount++;
+            add();
             printf("Connected client %s\n",buf);
         }
     }
@@ -105,7 +106,7 @@ int authentication(int sock){
             fprintf(mon,"%i\t",connected[clientsCount].uid);
             fprintf(mon,"%i            \n",connected[clientsCount].money);
             fclose(mon);
-            clientsCount++;
+            add();
             res=1;
         }
     }
@@ -226,8 +227,9 @@ void transfer(int sock){
         int i,j;
         for (i = 0; i <= clientsCount; ++i) {
             if (connected[i].sock == sock){
-                connected[i].money-=value;
                 dest=connected[i].uid;
+                connected[i].money=get_money(dest);
+                connected[i].money-=value;
                 j=i;
             }
         }
@@ -245,7 +247,7 @@ int check_user(char buf[]){
     char tmp[bufSize+1];
     char id[10];
     int res=-1;
-    int k;
+    int k=-1;
     FILE *file;
     char *fname = "/home/user/project_t/us.txt";
     file = fopen(fname,"r");
@@ -276,18 +278,26 @@ int check_user(char buf[]){
     return res;
 }
 
+void add(){
+    pthread_mutex_lock(&clientsMutex);
+    clientsCount++;
+    pthread_mutex_unlock(&clientsMutex);
+}
+
 void disconnect(int sock){
+    pthread_mutex_lock(&clientsMutex);
     int i = 0;
-        for (i = 0; i < clientsCount; ++i) {
-            if (connected[i].sock == sock)
-                break;
+    for (i = 0; i < clientsCount; ++i) {
+        if (connected[i].sock == sock)
+            break;
+    }
+    if (i != clientsCount) {
+        for (++i; i < clientsCount; ++i) {
+            connected[i - 1] = connected[i];
         }
-        if (i != clientsCount) {
-            for (++i; i < clientsCount; ++i) {
-                connected[i - 1] = connected[i];
-            }
-            --clientsCount;
-        }
+        --clientsCount;
+    }
+    pthread_mutex_unlock(&clientsMutex);
 }
 
 void* server_handler(void*){

@@ -8,5 +8,6 @@ void check_wallet(int sock);
 void transfer(int sock);
 void *server_handler(void *);
 void disconnect(int sock);
+void add();
 #endif // SERVER
 
